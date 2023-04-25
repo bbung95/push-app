@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import Subscribe from "@/models/Subscribe";
 import dbConnect from "@/lib/dbConnect";
 import fcmAdmin, { createMessage } from "@/lib/firebase-admin";
 

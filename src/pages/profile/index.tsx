@@ -1,9 +1,25 @@
 import FriendItem from "@/components/FriendItem";
 import Navigation from "@/components/Navigation";
+import { auth } from "@/lib/firebase-init";
+import { signOut } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 const index = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const router = useRouter();
+
+    const handleOnClickLogout = async () => {
+        if (!confirm("로그아웃 됩니다.")) {
+            return;
+        }
+
+        await signOut(auth).then(() => {
+            router.push("/");
+        });
+    };
+
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
             <div className="w-11/12 m-auto mt-12">
@@ -27,6 +43,9 @@ const index = () => {
                     <Link href="/profile/invited" className="btn btn-info text-white text-lg">
                         초대목록
                     </Link>
+                    <button className="btn btn-error text-white text-lg" onClick={handleOnClickLogout}>
+                        로그아웃
+                    </button>
                 </div>
             </div>
         </main>

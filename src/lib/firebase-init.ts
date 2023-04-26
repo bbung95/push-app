@@ -1,5 +1,6 @@
-import { initializeApp } from "firebase/app";
+import * as firebase from "firebase/app";
 import { getFirestore } from "firebase/firestore";
+import { GoogleAuthProvider, getAuth } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDh637XzsNHu2v5RPwlxwznenM74EOu73U",
@@ -11,5 +12,15 @@ const firebaseConfig = {
     measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
-export const app = initializeApp(firebaseConfig);
+const init = () => {
+    if (!firebase.getApps.length) {
+        return firebase.initializeApp(firebaseConfig);
+    } else {
+        return firebase.getApp();
+    }
+};
+
+export const app = init();
 export const db = getFirestore(app);
+export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();

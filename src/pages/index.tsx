@@ -1,9 +1,14 @@
-import { app } from "@/lib/firebase-messaging-init";
+import { app, auth, provider } from "@/lib/firebase-init";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import Link from "next/link";
+import { Router, useRouter } from "next/router";
 import { useEffect } from "react";
 
 export default function index() {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const router = useRouter();
+
     const requestPermission = async () => {
         if (typeof window !== "undefined" && typeof window.navigator !== "undefined") {
             const messaging = getMessaging(app);
@@ -24,6 +29,31 @@ export default function index() {
         }
     };
 
+    const handlerGoogleLogin = () => {
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential?.accessToken;
+                // The signed-in user info.
+                const user = result.user;
+                // IdP data available using getAdditionalUserInfo(result)
+                // ...
+                console.log(token, user.uid);
+                router.push("/home");
+            })
+            .catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData.email;
+                // The AuthCredential type that was used.
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                // ...
+            });
+    };
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
         requestPermission();
@@ -41,9 +71,9 @@ export default function index() {
                 <Link href={"/home"} className="btn btn-warning text-gray-600 drop-shadow-md">
                     kakao
                 </Link>
-                <Link href={"/home"} className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md">
+                <button className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md" onClick={handlerGoogleLogin}>
                     google
-                </Link>
+                </button>
             </div>
         </div>
     );

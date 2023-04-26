@@ -2,8 +2,8 @@ import React, { useState } from "react";
 
 interface UserInputBoxProps {
     title: string;
-    handle: Function;
     type?: string;
+    handle: Function;
 }
 
 const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
@@ -15,7 +15,6 @@ const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
 
     const handleOnChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target;
-
         setUserData({ ...userData, [target.name]: target.value });
     };
 
@@ -70,7 +69,7 @@ const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
                             </div>
                         )}
                         <div className="flex flex-gap form-control mt-6 gap-2">
-                            <button className="btn btn-info text-white" onClick={(e) => handle(e)}>
+                            <button className="btn btn-info text-white" onClick={() => handle()}>
                                 {title}
                             </button>
                         </div>

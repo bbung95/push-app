@@ -1,9 +1,15 @@
 import admin from "firebase-admin";
 import serviceAccount from "./firebase-adminsdk.json";
 
+const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY || "{privateKey : ''}");
+
 if (!admin.apps.length) {
     admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+        credential: admin.credential.cert({
+            projectId: "push-app-be4be",
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: privateKey,
+        }),
     });
 }
 

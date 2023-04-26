@@ -9,7 +9,7 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>();
 handler.get(async (req, res) => {
     // await dbConnect();
 
-    let deviceToken = `fo9mMV15erjL6pZiAa7qC4:APA91bG5JNU78UIIgn6szfDfL8bCqNfJlE1B26muJKELrSLKRiCT_KSS_L3hrZQ07orZIc6lwAb_iQTmxyEGME1_guQVCAq_LVBnNxWim4AsBjbykfQsoElAWWwnks20RVdeJxsg7n6K`;
+    let deviceToken = "fH8TkCaJyzyGi63RtaJhFN:APA91bESRedyGM0v4zaidc6-Njw5qts-oE8TBtGqksuohkkEjZiWzg0_w-WMhKFMDLb5KVpKXYjNRfAPM1Mt0IeByp27vFAIPFmZFabVOpQi58s4qB0747rLQCE6km0PwCBWCkCSxF1d";
     const message = createMessage(deviceToken, {
         title: "테스트 발송💛",
         body: "망고플레이트 앱 확인해보세요!💚",

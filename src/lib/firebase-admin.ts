@@ -1,12 +1,12 @@
 import admin from "firebase-admin";
 
-const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY || "{privateKey : ''}");
+const { privateKey } = JSON.parse(process.env.REACT_APP_FIREBASE_PRIVATE_KEY || "{privateKey : ''}");
 
 if (!admin.apps.length) {
     admin.initializeApp({
         credential: admin.credential.cert({
             projectId: "push-app-be4be",
-            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            clientEmail: process.env.REACT_APP_FIREBASE_CLIENT_EMAIL,
             privateKey: privateKey,
         }),
     });

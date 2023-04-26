@@ -1,10 +1,12 @@
+import Layout from "@/components/Layout";
+import Navigation from "@/components/Navigation";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        <div className="h-screen max-w-screen-sm w-full m-auto">
+        <Layout>
             <Component {...pageProps} />
-        </div>
+        </Layout>
     );
 }

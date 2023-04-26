@@ -19,7 +19,6 @@ const index = () => {
                         ))}
                 </ul>
             </div>
-            <Navigation />
         </main>
     );
 };

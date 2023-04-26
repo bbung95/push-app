@@ -55,7 +55,6 @@ const Push = () => {
                     </Link>
                 </div>
             </div>
-            <Navigation />
         </main>
     );
 };

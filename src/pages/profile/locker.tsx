@@ -22,8 +22,6 @@ const locker = () => {
                         ))}
                 </div>
             </div>
-
-            <Navigation />
         </main>
     );
 };

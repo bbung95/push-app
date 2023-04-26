@@ -43,7 +43,6 @@ const index = () => {
                         ))}
                 </div>
             </div>
-            <Navigation />
         </main>
     );
 };

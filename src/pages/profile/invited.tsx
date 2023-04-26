@@ -31,8 +31,6 @@ const locker = () => {
                     </div>
                 </div>
             </div>
-
-            <Navigation />
         </main>
     );
 };

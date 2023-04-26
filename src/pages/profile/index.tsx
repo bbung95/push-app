@@ -29,8 +29,6 @@ const index = () => {
                     </Link>
                 </div>
             </div>
-
-            <Navigation />
         </main>
     );
 };

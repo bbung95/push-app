@@ -1,5 +1,4 @@
 import admin from "firebase-admin";
-import serviceAccount from "./firebase-adminsdk.json";
 
 const { privateKey } = JSON.parse(process.env.FIREBASE_PRIVATE_KEY || "{privateKey : ''}");
 

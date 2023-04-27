@@ -4,6 +4,9 @@ import React from "react";
 import { useRouter } from "next/router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase-init";
+import axios from "axios";
+import { fetchUserAdd } from "@/api/UserFetchAPI";
+import { UserAddProps } from "@/@types/userType";
 
 const index = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -11,11 +14,18 @@ const index = () => {
 
     const handleOnClickSignup = () => {
         createUserWithEmailAndPassword(auth, "bbung@naver.com", "123456789")
-            .then((userCredential) => {
+            .then(async (userCredential) => {
                 // Signed in
                 const user = userCredential.user;
 
                 console.log(user.uid);
+
+                const data: UserAddProps = {
+                    id: user.uid,
+                    email: user.email ?? "",
+                };
+
+                const res = await fetchUserAdd(data);
             })
             .catch((error) => {
                 const errorCode = error.code;

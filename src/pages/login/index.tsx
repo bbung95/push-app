@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase-init";
+import { fetchGetUser } from "@/api/UserFetchAPI";
 
 const index = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -15,7 +16,6 @@ const index = () => {
                 // Signed in
                 const user = userCredential.user;
 
-                console.log(user.uid);
                 router.push("/home");
             })
             .catch((error) => {

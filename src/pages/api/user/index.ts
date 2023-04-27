@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import fcmAdmin, { createMessage } from "@/lib/firebase-admin";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import { UserProps } from "@/@types/model";
 
@@ -27,23 +27,26 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>();
 //             console.log("Error Sending message!!! : ", err);
 //             return res.status(400).json({ success: false });
 //         });
-// });
+// })
 
 handler.post(async (req, res) => {
+    const body = req.body;
+
     const user: UserProps = {
-        name: "bbung",
-        nickname: "뻥뻥이",
-        password: "1234",
+        id: body.id,
+        email: body.email,
+        nickname: "",
         profile_img: "1234",
-        state_message: "1234",
+        state_message: "",
         first_login: true,
         created_date: serverTimestamp(),
         modified_date: serverTimestamp(),
         login_date: serverTimestamp(),
     };
 
-    const docRef = await addDoc(collection(db, "user"), user);
-    console.log("Document written with ID: ", docRef.id);
+    const docRef = await setDoc(doc(db, "user", body.id), user);
+
+    res.status(201);
 });
 
 export default handler;

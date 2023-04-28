@@ -4,21 +4,20 @@ import React from "react";
 import { useRouter } from "next/router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase-init";
-import axios from "axios";
 import { fetchUserAdd } from "@/api/UserFetchAPI";
 import { UserAddProps } from "@/@types/userType";
+import { UserFormProps } from "@/@types/userType";
+import { FirebaseAuthErrorCodes } from "@/@types/firebase";
 
 const index = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const router = useRouter();
 
-    const handleOnClickSignup = () => {
-        createUserWithEmailAndPassword(auth, "bbung@naver.com", "123456789")
+    const handleOnClickSignup = ({ email, password, passwordCheck }: UserFormProps) => {
+        createUserWithEmailAndPassword(auth, email, password === passwordCheck ? password : "")
             .then(async (userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-
-                console.log(user.uid);
 
                 const data: UserAddProps = {
                     id: user.uid,
@@ -29,9 +28,18 @@ const index = () => {
             })
             .catch((error) => {
                 const errorCode = error.code;
-                const errorMessage = error.message;
+                const errorMessage = FirebaseAuthErrorCodes[errorCode];
 
-                console.log(errorCode, errorMessage);
+                console.error(errorCode);
+                if (!errorMessage) {
+                    alert("문제가 발생했습니다");
+                    return;
+                }
+                if (errorCode === "auth/missing-password" && password !== passwordCheck) {
+                    alert("비밀번호를 확인해주세요.");
+                    return;
+                }
+                alert(errorMessage);
             });
     };
 

@@ -14,15 +14,11 @@ export const fetchUserAdd = async ({ id, email }: UserAddProps) => {
         },
     });
 
-    console.log("fetchUserAdd", res);
-
     return res;
 };
 
 export const fetchGetUser = async (id: string) => {
     const res = await axios.get(`/api/user/${id}`);
-
-    console.log("fetchGetUser", res);
 
     return res;
 };

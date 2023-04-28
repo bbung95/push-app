@@ -12,7 +12,9 @@ handler.get(async (req, res) => {
     const findUser = await getDoc(doc(db, "user", id));
 
     if (findUser.exists()) {
-        res.json(findUser.data());
+        const data = findUser.data();
+
+        res.json(data);
     } else {
         res.json({});
     }

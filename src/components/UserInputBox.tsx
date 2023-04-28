@@ -1,3 +1,4 @@
+import { UserFormProps } from "@/@types/userType";
 import React, { useState } from "react";
 
 interface UserInputBoxProps {
@@ -7,8 +8,8 @@ interface UserInputBoxProps {
 }
 
 const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
-    const [userData, setUserData] = useState({
-        name: "",
+    const [userData, setUserData] = useState<UserFormProps>({
+        email: "",
         password: "",
         passwordCheck: "",
     });
@@ -16,6 +17,10 @@ const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
     const handleOnChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target;
         setUserData({ ...userData, [target.name]: target.value });
+    };
+
+    const handleOnClickSubmit = () => {
+        handle(userData);
     };
 
     return (
@@ -26,17 +31,9 @@ const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
                     <div className=" pl-4 pr-4">
                         <div className="form-control">
                             <label className="label">
-                                <span className="label-text">아이디</span>
+                                <span className="label-text">이메일</span>
                             </label>
-                            <input
-                                type="text"
-                                placeholder="아이디를 작성해주세요"
-                                name="name"
-                                className="input input-bordered"
-                                value={userData.name}
-                                onChange={handleOnChangeInput}
-                                autoComplete="off"
-                            />
+                            <input type="text" placeholder="이메일을 입력해주세요." name="email" className="input input-bordered" value={userData.email} onChange={handleOnChangeInput} />
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -69,7 +66,7 @@ const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
                             </div>
                         )}
                         <div className="flex flex-gap form-control mt-6 gap-2">
-                            <button className="btn btn-info text-white" onClick={() => handle()}>
+                            <button className="btn btn-info text-white" onClick={handleOnClickSubmit}>
                                 {title}
                             </button>
                         </div>

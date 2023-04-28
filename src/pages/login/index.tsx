@@ -1,28 +1,28 @@
 import UserInputBox from "@/components/UserInputBox";
 import Link from "next/link";
 import React from "react";
-import { useRouter } from "next/router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase-init";
-import { fetchGetUser } from "@/api/UserFetchAPI";
+import { UserFormProps } from "@/@types/userType";
+import { FirebaseAuthErrorCodes } from "@/@types/firebase";
 
 const index = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const router = useRouter();
-
-    const handleOnClickLogin = () => {
-        signInWithEmailAndPassword(auth, "bbung@naver.com", "123456789")
+    const handleOnClickLogin = ({ email, password }: UserFormProps) => {
+        signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-
-                router.push("/home");
             })
             .catch((error) => {
                 const errorCode = error.code;
-                const errorMessage = error.message;
+                const errorMessage = FirebaseAuthErrorCodes[errorCode];
 
-                console.log(errorCode, errorMessage);
+                console.error(errorCode);
+                if (!errorMessage) {
+                    alert("문제가 발생했습니다");
+                    return;
+                }
+                alert(errorMessage);
             });
     };
 

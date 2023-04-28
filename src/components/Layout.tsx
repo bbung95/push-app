@@ -14,12 +14,14 @@ const Layout = ({ children }: { children: JSX.Element }) => {
 
     const [userAuth, setUserAuth] = useRecoilState(authState);
 
+    // firebase auth 정보
     onAuthStateChanged(auth, async (user) => {
-        console.log(user);
         if (user) {
             const uid = user.uid;
             if (userAuth.id === "") {
                 const { data } = await fetchGetUser(uid);
+
+                console.log("changeAuth", data);
 
                 setUserAuth(data);
             }
@@ -31,6 +33,7 @@ const Layout = ({ children }: { children: JSX.Element }) => {
         }
     });
 
+    // 알림 권한 체크
     const requestPermission = async () => {
         if (typeof window !== "undefined" && typeof window.navigator !== "undefined") {
             const messaging = getMessaging(app);
@@ -54,22 +57,22 @@ const Layout = ({ children }: { children: JSX.Element }) => {
     const authURLs = ["/", "/login", "/signup"];
 
     useEffect(() => {
-        requestPermission();
-    }, []);
-
-    useEffect(() => {
         if (authURLs.includes(pathname)) {
-            if (userAuth.id) {
+            if (userAuth.id !== "") {
                 console.log("go home");
                 router.push("/home");
             }
         } else {
-            if (!userAuth.id) {
+            if (userAuth.id === "") {
                 console.log("go root");
                 router.push("/");
             }
         }
     });
+
+    useEffect(() => {
+        requestPermission();
+    }, []);
 
     return (
         <div className="h-screen max-w-screen-sm w-full m-auto">

@@ -2,41 +2,40 @@ import { UserAddProps } from "@/@types/userType";
 import { fetchUserAdd } from "@/api/UserFetchAPI";
 import { app, auth, provider } from "@/lib/firebase-init";
 import { async } from "@firebase/util";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, getRedirectResult, signInWithPopup, signInWithRedirect } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 export default function index() {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const router = useRouter();
+    // const router = useRouter();
 
-    const handlerGoogleLogin = () => {
-        signInWithPopup(auth, provider)
-            .then(async (result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result);
+    // const handlerGoogleLogin = () => {
+    //     signInWithRedirect(auth, provider);
+    // };
+    // getRedirectResult(auth)
+    //     .then((result) => {
+    //         // This gives you a Google Access Token. You can use it to access Google APIs.
+    //         // const credential = GoogleAuthProvider.credentialFromResult(result);
+    //         // const token = credential.accessToken;
 
-                const token = credential?.accessToken;
-                const user = result.user;
-                // IdP data available using getAdditionalUserInfo(result)
-                console.log(user.uid, user);
+    //         // // The signed-in user info.
+    //         // const user = result.user;
+    //         // IdP data available using getAdditionalUserInfo(result)
+    //         // ...
 
-                const data: UserAddProps = {
-                    id: user.uid,
-                    email: user.email ?? "",
-                };
-
-                await fetchUserAdd(data).then(() => {
-                    router.push("/home");
-                });
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                const email = error.customData.email;
-                const credential = GoogleAuthProvider.credentialFromError(error);
-            });
-    };
+    //         console.log(result);
+    //     })
+    //     .catch((error) => {
+    //         // Handle Errors here.
+    //         const errorCode = error.code;
+    //         const errorMessage = error.message;
+    //         // The email of the user's account used.
+    //         const email = error.customData.email;
+    //         // The AuthCredential type that was used.
+    //         const credential = GoogleAuthProvider.credentialFromError(error);
+    //         // ...
+    //     });
 
     return (
         <div className="h-full bg-main-color">
@@ -47,12 +46,12 @@ export default function index() {
                 <Link href={"/signup"} className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md">
                     회원가입
                 </Link>
-                <Link href={"/home"} className="btn btn-warning text-gray-600 drop-shadow-md">
+                {/* <Link href={"/home"} className="btn btn-warning text-gray-600 drop-shadow-md">
                     kakao
                 </Link>
                 <button className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md" onClick={handlerGoogleLogin}>
                     google
-                </button>
+                </button> */}
             </div>
         </div>
     );

@@ -14,3 +14,9 @@ export interface UserAuthProps {
     modified_date?: Date;
     login_date?: Date;
 }
+
+export interface UserFormProps {
+    email: string;
+    password: string;
+    passwordCheck?: string;
+}

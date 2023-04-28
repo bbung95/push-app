@@ -10,4 +10,5 @@ export interface UserProps {
     created_date: FieldValue;
     modified_date: FieldValue;
     login_date: FieldValue;
+    token: string;
 }

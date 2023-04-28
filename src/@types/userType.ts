@@ -3,6 +3,16 @@ export interface UserAddProps {
     email: string;
 }
 
+export interface UserNicknameUpdateProps {
+    id: string;
+    nickname: string;
+}
+
+export interface UserTokenUpdateProps {
+    id: string;
+    token: string;
+}
+
 export interface UserAuthProps {
     id: string;
     email: string;
@@ -19,4 +29,10 @@ export interface UserFormProps {
     email: string;
     password: string;
     passwordCheck?: string;
+}
+
+export interface UserUpdateProps {
+    id: string;
+    nickname: string;
+    state_message?: string;
 }

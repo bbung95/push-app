@@ -27,4 +27,9 @@ messaging.onBackgroundMessage((payload) => {
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
+// self.onnotificationclick = (event) => {
+//     console.log("On notification click: ", event.notification.tag);
+//     event.notification.close();
+// };
+
 console.log("init sw");

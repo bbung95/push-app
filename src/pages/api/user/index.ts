@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import fcmAdmin, { createMessage } from "@/lib/firebase-admin";
-import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { collection, doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import { UserProps } from "@/@types/model";
 
@@ -42,11 +42,23 @@ handler.post(async (req, res) => {
         created_date: serverTimestamp(),
         modified_date: serverTimestamp(),
         login_date: serverTimestamp(),
+        token: "",
     };
 
     const docRef = await setDoc(doc(db, "user", body.id), user);
 
-    res.status(201);
+    return res.status(201);
+});
+
+handler.put(async (req, res) => {
+    const body = req.body;
+
+    await updateDoc(doc(db, "user", body.id), {
+        nickname: body.nickname,
+        state_message: body.state_message,
+    });
+
+    return res.json(true);
 });
 
 export default handler;

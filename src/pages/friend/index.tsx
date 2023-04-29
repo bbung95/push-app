@@ -5,7 +5,7 @@ import React from "react";
 const index = () => {
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
-            <div className="w-11/12 m-auto mt-12">
+            <div className="w-11/12 m-auto pt-4">
                 <h1 className=" text-3xl font-bold">친구 목록</h1>
                 <div className="mt-4 relative">
                     <input type="text" placeholder="Search..." className="input input-bordered rounded-xl bg-gray-100 w-full pr-12" />

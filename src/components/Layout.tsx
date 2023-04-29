@@ -17,44 +17,7 @@ const Layout = ({ children }: { children: JSX.Element }) => {
 
     const authURLs = ["/", "/login", "/signup"];
 
-    useEffect(() => {
-        // firebase auth 정보
-
-        onAuthStateChanged(auth, async (user) => {
-            const token = await requestPermission();
-
-            console.log("auth 확인", user);
-
-            if (user) {
-                const uid = user.uid;
-                const email = user.email;
-
-                if (userAuth.id === "") {
-                    console.log("로그인완료");
-
-                    const res = await fetchGetUser(uid);
-
-                    if (!res.data.id) {
-                        const data: UserAddProps = {
-                            id: uid,
-                            email: email ?? "",
-                        };
-                        await fetchUserAdd(data);
-                        const res = await fetchGetUser(uid);
-                        setUserAuth(res.data);
-                    } else {
-                        setUserAuth(res.data);
-                    }
-                    await fetchUserTokenUpdate({ id: uid, token: token ?? "" });
-                }
-            } else {
-                // User is signed out
-                setUserAuth(initialState);
-            }
-        });
-    }, []);
-
-    useEffect(() => {
+    const authRouter = () => {
         if (authURLs.includes(pathname)) {
             // 로그인 O
             if (userAuth.id !== "") {
@@ -83,6 +46,45 @@ const Layout = ({ children }: { children: JSX.Element }) => {
                 return;
             }
         }
+    };
+
+    useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+            const token = await requestPermission();
+
+            console.log("auth 확인", user);
+
+            if (user) {
+                const uid = user.uid;
+                const email = user.email;
+
+                if (userAuth.id === "") {
+                    console.log("로그인완료", userAuth);
+
+                    const res = await fetchGetUser(uid);
+
+                    if (!res.data.id) {
+                        const data: UserAddProps = {
+                            id: uid,
+                            email: email ?? "",
+                        };
+                        await fetchUserAdd(data);
+                        const res = await fetchGetUser(uid);
+                        setUserAuth(res.data);
+                    } else {
+                        setUserAuth(res.data);
+                    }
+                    await fetchUserTokenUpdate({ id: uid, token: token ?? "" });
+                }
+            } else {
+                // User is signed out
+                setUserAuth(initialState);
+            }
+        });
+    }, [auth]);
+
+    useEffect(() => {
+        authRouter();
     }, [userAuth]);
 
     return (

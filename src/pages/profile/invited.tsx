@@ -4,7 +4,7 @@ import React from "react";
 const locker = () => {
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
-            <div className="w-11/12 m-auto mt-12">
+            <div className="w-11/12 m-auto pt-4">
                 <div className="flex gap-3 items-center">
                     <Link href={"/profile"}>
                         <img src="/icon/arrow-back.svg" alt="" width={28} height={28} />

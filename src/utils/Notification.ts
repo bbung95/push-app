@@ -22,5 +22,7 @@ export const requestPermission = async () => {
             console.log("denied");
             return "";
         }
+    } else {
+        return "";
     }
 };

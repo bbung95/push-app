@@ -19,7 +19,7 @@ const index = () => {
 
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
-            <div className="w-11/12 m-auto mt-12">
+            <div className="w-11/12 m-auto pt-4">
                 <h1 className="text-3xl font-bold">마이페이지</h1>
                 {userAuth.id !== "" && (
                     <>

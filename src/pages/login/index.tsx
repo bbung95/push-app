@@ -1,12 +1,53 @@
 import UserInputBox from "@/components/UserInputBox";
 import Link from "next/link";
 import React from "react";
-import { browserSessionPersistence, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
+import { browserSessionPersistence, onAuthStateChanged, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase-init";
-import { UserFormProps } from "@/@types/userType";
+import { UserAddProps, UserFormProps } from "@/@types/userType";
 import { FirebaseAuthErrorCodes } from "@/@types/firebase";
+import { requestPermission } from "@/utils/Notification";
+import { fetchGetUser, fetchUserAdd, fetchUserTokenUpdate } from "@/api/UserFetchAPI";
+import { useRecoilState } from "recoil";
+import { authState, initialState } from "@/recoil/atoms/authState";
 
 const index = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [userAuth, setUserAuth] = useRecoilState(authState);
+
+    const changeAuth = () => {
+        onAuthStateChanged(auth, async (user) => {
+            const token = await requestPermission();
+
+            console.log("auth 확인", user);
+
+            if (user) {
+                const uid = user.uid;
+                const email = user.email;
+
+                if (userAuth.id === "") {
+                    const res = await fetchGetUser(uid);
+
+                    if (!res.data.id) {
+                        const data: UserAddProps = {
+                            id: uid,
+                            email: email ?? "",
+                        };
+                        await fetchUserAdd(data);
+                        const res = await fetchGetUser(uid);
+                        setUserAuth(res.data);
+                    } else {
+                        setUserAuth(res.data);
+                    }
+
+                    await fetchUserTokenUpdate({ id: uid, token: token ?? "" });
+                }
+            } else {
+                // User is signed out
+                setUserAuth(initialState);
+            }
+        });
+    };
+
     const handleOnClickLogin = ({ email, password }: UserFormProps) => {
         setPersistence(auth, browserSessionPersistence).then(() => {
             signInWithEmailAndPassword(auth, email, password)
@@ -14,6 +55,8 @@ const index = () => {
                     // Signed in
                     const user = userCredential.user;
                     console.log("로그인 완료", user);
+
+                    changeAuth();
                 })
                 .catch((error) => {
                     const errorCode = error.code;

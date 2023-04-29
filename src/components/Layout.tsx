@@ -51,16 +51,12 @@ const Layout = ({ children }: { children: JSX.Element }) => {
     useEffect(() => {
         onAuthStateChanged(auth, async (user) => {
             const token = await requestPermission();
-
             console.log("auth 확인", user);
-
             if (user) {
                 const uid = user.uid;
                 const email = user.email;
-
                 if (userAuth.id === "") {
                     const res = await fetchGetUser(uid);
-
                     if (!res.data.id) {
                         const data: UserAddProps = {
                             id: uid,
@@ -72,7 +68,6 @@ const Layout = ({ children }: { children: JSX.Element }) => {
                     } else {
                         setUserAuth(res.data);
                     }
-
                     await fetchUserTokenUpdate({ id: uid, token: token ?? "" });
                 }
             } else {

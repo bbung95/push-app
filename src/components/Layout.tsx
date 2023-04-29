@@ -48,42 +48,39 @@ const Layout = ({ children }: { children: JSX.Element }) => {
         }
     };
 
-    onAuthStateChanged(auth, async (user) => {
-        const token = await requestPermission();
+    useEffect(() => {
+        onAuthStateChanged(auth, async (user) => {
+            const token = await requestPermission();
 
-        console.log("auth 확인", user);
+            console.log("auth 확인", user);
 
-        if (user) {
-            const uid = user.uid;
-            const email = user.email;
+            if (user) {
+                const uid = user.uid;
+                const email = user.email;
 
-            if (userAuth.id === "") {
-                console.log("로그인완료", userAuth);
-
-                const res = await fetchGetUser(uid);
-
-                console.log("user data", res);
-
-                if (!res.data.id) {
-                    const data: UserAddProps = {
-                        id: uid,
-                        email: email ?? "",
-                    };
-                    await fetchUserAdd(data);
+                if (userAuth.id === "") {
                     const res = await fetchGetUser(uid);
-                    setUserAuth(res.data);
-                } else {
-                    setUserAuth(res.data);
-                }
 
-                console.log("token update", uid, token);
-                await fetchUserTokenUpdate({ id: uid, token: token ?? "" });
+                    if (!res.data.id) {
+                        const data: UserAddProps = {
+                            id: uid,
+                            email: email ?? "",
+                        };
+                        await fetchUserAdd(data);
+                        const res = await fetchGetUser(uid);
+                        setUserAuth(res.data);
+                    } else {
+                        setUserAuth(res.data);
+                    }
+
+                    await fetchUserTokenUpdate({ id: uid, token: token ?? "" });
+                }
+            } else {
+                // User is signed out
+                setUserAuth(initialState);
             }
-        } else {
-            // User is signed out
-            setUserAuth(initialState);
-        }
-    });
+        });
+    }, []);
 
     useEffect(() => {
         authRouter();

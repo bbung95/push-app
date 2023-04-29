@@ -1,30 +1,32 @@
 import UserInputBox from "@/components/UserInputBox";
 import Link from "next/link";
 import React from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { browserSessionPersistence, setPersistence, signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase-init";
 import { UserFormProps } from "@/@types/userType";
 import { FirebaseAuthErrorCodes } from "@/@types/firebase";
 
 const index = () => {
     const handleOnClickLogin = ({ email, password }: UserFormProps) => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                console.log("로그인 완료", user);
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = FirebaseAuthErrorCodes[errorCode];
+        setPersistence(auth, browserSessionPersistence).then(() => {
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
+                    console.log("로그인 완료", user);
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = FirebaseAuthErrorCodes[errorCode];
 
-                console.error(errorCode);
-                if (!errorMessage) {
-                    alert("문제가 발생했습니다 " + errorCode);
-                    return;
-                }
-                alert(errorMessage);
-            });
+                    console.error(errorCode);
+                    if (!errorMessage) {
+                        alert("문제가 발생했습니다 " + errorCode);
+                        return;
+                    }
+                    alert(errorMessage);
+                });
+        });
     };
 
     return (

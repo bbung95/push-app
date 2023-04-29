@@ -62,6 +62,8 @@ const Layout = ({ children }: { children: JSX.Element }) => {
 
                 const res = await fetchGetUser(uid);
 
+                console.log("user data", res);
+
                 if (!res.data.id) {
                     const data: UserAddProps = {
                         id: uid,
@@ -73,6 +75,8 @@ const Layout = ({ children }: { children: JSX.Element }) => {
                 } else {
                     setUserAuth(res.data);
                 }
+
+                console.log("token update", uid, token);
                 await fetchUserTokenUpdate({ id: uid, token: token ?? "" });
             }
         } else {

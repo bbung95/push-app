@@ -30,7 +30,10 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>();
 // })
 
 handler.post(async (req, res) => {
+    console.log("user 등록");
+
     const body = req.body;
+    console.log("body", body);
 
     const user: UserProps = {
         id: body.id,
@@ -47,7 +50,7 @@ handler.post(async (req, res) => {
 
     const docRef = await setDoc(doc(db, "user", body.id), user);
 
-    return res.status(201);
+    return res.json(true);
 });
 
 handler.put(async (req, res) => {

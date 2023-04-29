@@ -26,7 +26,7 @@ const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
     return (
         <div className="hero">
             <div className="hero-content w-full flex-col">
-                <div className="card flex-shrink-0 w-full max-w-sm bg-base-100">
+                <div className="card flex-shrink-0 w-full max-w-sm bg-white">
                     <h1 className="text-3xl font-bold text-center">{title}</h1>
                     <div className=" pl-4 pr-4">
                         <div className="form-control">

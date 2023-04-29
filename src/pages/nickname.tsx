@@ -6,9 +6,6 @@ import { useRecoilState } from "recoil";
 
 const nickname = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const router = useRouter();
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [userAuth, setUserAuth] = useRecoilState(authState);
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [nickname, setNickname] = useState("");
@@ -40,8 +37,6 @@ const nickname = () => {
 
         if (res.data) {
             setUserAuth({ ...userAuth, first_login: false, nickname: nickname });
-
-            router.push("/home");
         }
     };
 

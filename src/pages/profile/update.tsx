@@ -55,8 +55,6 @@ const index = () => {
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-        console.log("useEffect");
-
         setUserData({
             nickname: userAuth.nickname,
             state_message: userAuth.state_message,

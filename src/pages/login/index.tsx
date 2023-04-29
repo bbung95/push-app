@@ -12,6 +12,7 @@ const index = () => {
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
+                console.log("로그인 완료", user);
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -19,7 +20,7 @@ const index = () => {
 
                 console.error(errorCode);
                 if (!errorMessage) {
-                    alert("문제가 발생했습니다");
+                    alert("문제가 발생했습니다 " + errorCode);
                     return;
                 }
                 alert(errorMessage);
@@ -28,7 +29,7 @@ const index = () => {
 
     return (
         <div className="h-full bg-main-color flex flex-col-reverse">
-            <div className="h-3/5 pt-5 bg-white rounded-t-3xl drop-shadow-[0_1px_3px_rgba(25,40,47,0.5)]">
+            <div className="pb-12 pt-5 bg-white rounded-t-3xl drop-shadow-[0_1px_3px_rgba(25,40,47,0.5)]">
                 <UserInputBox title="로그인" handle={handleOnClickLogin} />
             </div>
             <div className="flex-1 w-11/12 m-auto mt-12 ">

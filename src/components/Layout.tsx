@@ -5,8 +5,9 @@ import { auth } from "@/lib/firebase-init";
 import { onAuthStateChanged } from "firebase/auth";
 import { useRecoilState } from "recoil";
 import { authState, initialState } from "@/recoil/atoms/authState";
-import { fetchGetUser, fetchUserTokenUpdate } from "@/api/UserFetchAPI";
+import { fetchGetUser, fetchUserAdd, fetchUserTokenUpdate } from "@/api/UserFetchAPI";
 import { requestPermission } from "@/utils/Notification";
+import { UserAddProps } from "@/@types/userType";
 
 const Layout = ({ children }: { children: JSX.Element }) => {
     const router = useRouter();
@@ -22,21 +23,33 @@ const Layout = ({ children }: { children: JSX.Element }) => {
         onAuthStateChanged(auth, async (user) => {
             const token = await requestPermission();
 
+            console.log("auth 확인", user);
+
             if (user) {
                 const uid = user.uid;
+                const email = user.email;
 
                 if (userAuth.id === "") {
-                    const res = await fetchUserTokenUpdate({ id: uid, token: token ?? "" });
+                    console.log("로그인완료");
 
-                    const { data } = await fetchGetUser(uid);
+                    const res = await fetchGetUser(uid);
 
-                    setUserAuth(data);
+                    if (!res.data.id) {
+                        const data: UserAddProps = {
+                            id: uid,
+                            email: email ?? "",
+                        };
+                        await fetchUserAdd(data);
+                        const res = await fetchGetUser(uid);
+                        setUserAuth(res.data);
+                    } else {
+                        setUserAuth(res.data);
+                    }
+                    await fetchUserTokenUpdate({ id: uid, token: token ?? "" });
                 }
             } else {
                 // User is signed out
-                if (userAuth.id !== "") {
-                    setUserAuth(initialState);
-                }
+                setUserAuth(initialState);
             }
         });
     }, []);
@@ -66,7 +79,7 @@ const Layout = ({ children }: { children: JSX.Element }) => {
                 router.push("/nickname");
                 return;
             } else if (pathname === "/nickname") {
-                router.push("/");
+                router.push("/home");
                 return;
             }
         }

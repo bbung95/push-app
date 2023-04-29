@@ -1,6 +1,6 @@
 export interface UserAddProps {
-    id: string;
     email: string;
+    password: string;
 }
 
 export interface UserNicknameUpdateProps {

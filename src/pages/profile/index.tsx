@@ -1,20 +1,17 @@
-import { auth } from "@/lib/firebase-init";
-import { authState } from "@/recoil/atoms/authState";
-import { signOut } from "firebase/auth";
+import { authState, initialState } from "@/recoil/atoms/authState";
 import Link from "next/link";
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 
 const index = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const userAuth = useRecoilValue(authState);
+    const [userAuth, setUserAuth] = useRecoilState(authState);
 
     const handleOnClickLogout = async () => {
-        if (!confirm("로그아웃 됩니다.")) {
-            return;
-        }
+        if (!confirm("로그아웃 됩니다")) return;
 
-        await signOut(auth);
+        localStorage.removeItem("jwt-token");
+        setUserAuth(initialState);
     };
 
     return (

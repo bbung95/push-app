@@ -1,38 +1,34 @@
-// import { fetchGetUser, fetchUserAdd, fetchUserTokenUpdate } from "@/api/UserFetchAPI";
-// import { onAuthStateChanged } from "firebase/auth";
-// import { requestPermission } from "./Notification";
-// import { auth } from "@/lib/firebase-init";
-// import { UserAddProps } from "@/@types/userType";
-// import { initialState } from "@/recoil/atoms/authState";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
-// onAuthStateChanged(auth, async (user) => {
-//   const token = await requestPermission();
+interface JwtPayloadProps {
+    id: number;
+    email: string;
+}
+const secretKey: string = process.env.REACT_APP_JWT_SECRET_KEY ?? "";
 
-//   console.log("auth 확인", user);
+export const createdToken = ({ id, email }: JwtPayloadProps) => {
+    const token = jwt.sign({ id: id, email: email }, secretKey, {
+        expiresIn: -1,
+    });
 
-//   if (user) {
-//       const uid = user.uid;
-//       const email = user.email;
+    return token;
+};
 
-//       if (userAuth.id === "") {
-//           const res = await fetchGetUser(uid);
+export const verifiedToken = (token: string) => {
+    const replaceToken = token.replace(/^Bearer\s+/, "");
 
-//           if (!res.data.id) {
-//               const data: UserAddProps = {
-//                   id: uid,
-//                   email: email ?? "",
-//               };
-//               await fetchUserAdd(data);
-//               const res = await fetchGetUser(uid);
-//               setUserAuth(res.data);
-//           } else {
-//               setUserAuth(res.data);
-//           }
+    // const verified = jwt.verify(replaceToken, secretKey);
+    const verified = jwt.decode(replaceToken);
 
-//           await fetchUserTokenUpdate({ id: uid, token: token ?? "" });
-//       }
-//   } else {
-//       // User is signed out
-//       setUserAuth(initialState);
-//   }
-// });
+    return verified;
+};
+
+export const incoderPassword = (password: string) => {
+    // const salt = crypto.randomBytes(128).toString("base64");
+    return crypto.createHash("sha512").update(password).digest("hex");
+};
+
+export const matchPassword = (password: string, hashPassword: string) => {
+    return hashPassword == incoderPassword(password);
+};

@@ -1,30 +1,40 @@
 import UserInputBox from "@/components/UserInputBox";
 import Link from "next/link";
 import React from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase-init";
 import { UserFormProps } from "@/@types/userType";
-import { FirebaseAuthErrorCodes } from "@/@types/firebase";
+import { UserAuthErrorCodes } from "@/@types/errors";
+import { fetchGetAuthUser, fetchLoginUser, fetchUserAdd } from "@/api/UserFetchAPI";
+import { useRouter } from "next/router";
+import { useRecoilState } from "recoil";
+import { authState } from "@/recoil/atoms/authState";
 
 const index = () => {
-    const handleOnClickLogin = ({ email, password }: UserFormProps) => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                console.log("로그인 완료", user);
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = FirebaseAuthErrorCodes[errorCode];
+    const [userAuth, setUserAuth] = useRecoilState(authState);
 
-                console.error(errorCode);
-                if (!errorMessage) {
-                    alert("문제가 발생했습니다 " + errorCode);
-                    return;
-                }
-                alert(errorMessage);
-            });
+    const handleOnClickLogin = async ({ email, password }: UserFormProps) => {
+        console.log("로그인 시작");
+
+        if (email === "") {
+            const errorMessage = UserAuthErrorCodes["invalid-email"];
+            alert(errorMessage);
+            return;
+        }
+
+        if (password.length < 6) {
+            const errorMessage = UserAuthErrorCodes["weak-password"];
+            alert(errorMessage);
+            return;
+        }
+
+        const res = await fetchLoginUser({ email, password });
+        if (!res) {
+            return;
+        }
+
+        localStorage.setItem("jwt-token", res.data.data.token);
+        const { data } = await fetchGetAuthUser(res.data.data.token);
+        alert("로그인 되었습니다.");
+        setUserAuth(data.data);
     };
 
     return (

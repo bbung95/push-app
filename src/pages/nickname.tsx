@@ -35,7 +35,7 @@ const nickname = () => {
         if (!inputState.isDisabled) return;
         const res = await fetchNicknameUpdate({ id: userAuth.id, nickname: nickname });
 
-        if (res.data) {
+        if (res.data.status === 201) {
             setUserAuth({ ...userAuth, first_login: false, nickname: nickname });
         }
     };

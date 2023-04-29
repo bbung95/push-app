@@ -1,8 +1,9 @@
 import { FieldValue } from "firebase/firestore";
 
 export interface UserProps {
-    id: string;
+    id: number;
     email: string;
+    password: string;
     nickname: string;
     profile_img: string;
     state_message?: string;

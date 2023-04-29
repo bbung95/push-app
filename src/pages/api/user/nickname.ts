@@ -21,12 +21,19 @@ handler.get(async (req, res) => {
 
 // 닉네임 업데이트
 handler.put(async (req, res) => {
+    console.log("들어왓나");
+
     const body = req.body;
 
     console.log(body);
-    await updateDoc(doc(db, "user", body.id), { nickname: body.nickname, first_login: false });
 
-    return res.json(true);
+    try {
+        await updateDoc(doc(db, "user", String(body.id)), { nickname: body.nickname, first_login: false });
+    } catch (error) {
+        console.log(error);
+    }
+
+    return res.json({ status: 201 });
 });
 
 export default handler;

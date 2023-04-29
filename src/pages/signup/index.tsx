@@ -1,35 +1,46 @@
 import UserInputBox from "@/components/UserInputBox";
 import Link from "next/link";
 import React from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase-init";
 import { UserFormProps } from "@/@types/userType";
-import { FirebaseAuthErrorCodes } from "@/@types/firebase";
+import { UserAuthErrorCodes } from "@/@types/errors";
+import { fetchEmailCheck, fetchUserAdd } from "@/api/UserFetchAPI";
+import { useRouter } from "next/router";
 
 const index = () => {
-    const handleOnClickSignup = ({ email, password, passwordCheck }: UserFormProps) => {
-        createUserWithEmailAndPassword(auth, email, password === passwordCheck ? password : "")
-            .then(async (userCredential) => {
-                // Signed in
-                const user = userCredential.user;
+    const router = useRouter();
 
-                console.log("가입완료", user);
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = FirebaseAuthErrorCodes[errorCode];
+    const handleOnClickSignup = async ({ email, password, passwordCheck }: UserFormProps) => {
+        if (email === "") {
+            const errorMessage = UserAuthErrorCodes["invalid-email"];
+            alert(errorMessage);
+            return;
+        }
 
-                console.error(errorCode);
-                if (!errorMessage) {
-                    alert("문제가 발생했습니다");
-                    return;
-                }
-                if (errorCode === "auth/missing-password" && password !== passwordCheck) {
-                    alert("비밀번호를 확인해주세요.");
-                    return;
-                }
-                alert(errorMessage);
-            });
+        if (password.length < 6) {
+            const errorMessage = UserAuthErrorCodes["weak-password"];
+            alert(errorMessage);
+            return;
+        }
+
+        if (password !== passwordCheck) {
+            const errorMessage = UserAuthErrorCodes["wrong-password"];
+            alert(errorMessage);
+            return;
+        }
+
+        const { data } = await fetchEmailCheck(email);
+
+        if (!data) {
+            const errorMessage = UserAuthErrorCodes["email-already-in-use"];
+            alert(errorMessage);
+            return;
+        }
+
+        const res = await fetchUserAdd({ email, password });
+        localStorage.setItem("jwt-token", res.data);
+
+        alert("회원가입이 완료되었습니다.");
+        router.push("/");
     };
 
     return (

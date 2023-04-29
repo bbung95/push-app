@@ -1,9 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import fcmAdmin, { createMessage } from "@/lib/firebase-admin";
-import { collection, doc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import { UserProps } from "@/@types/model";
+import { getIndex } from "@/utils/DBUtill";
+import { incoderPassword } from "@/utils/AuthUtil";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
@@ -29,17 +30,30 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>();
 //         });
 // })
 
-handler.post(async (req, res) => {
-    console.log("user 등록");
+handler.get(async (req, res) => {
+    const email = req.query.email;
+    const qeury = query(collection(db, "user"), where("email", "==", email));
 
+    const findUsers = await getDocs(qeury);
+
+    if (findUsers.size > 0) {
+        return res.json(false);
+    }
+    return res.json(true);
+});
+
+handler.post(async (req, res) => {
     const body = req.body;
-    console.log("body", body);
+
+    const index = await getIndex("user");
+    const incoderPwd = await incoderPassword(body.password);
 
     const user: UserProps = {
-        id: body.id,
+        id: index,
         email: body.email,
+        password: incoderPwd,
         nickname: "",
-        profile_img: "1234",
+        profile_img: "",
         state_message: "",
         first_login: true,
         created_date: serverTimestamp(),
@@ -48,7 +62,7 @@ handler.post(async (req, res) => {
         token: "",
     };
 
-    const docRef = await setDoc(doc(db, "user", body.id), user);
+    await setDoc(doc(db, "user", String(user.id)), user);
 
     return res.json(true);
 });
@@ -56,12 +70,12 @@ handler.post(async (req, res) => {
 handler.put(async (req, res) => {
     const body = req.body;
 
-    await updateDoc(doc(db, "user", body.id), {
+    await updateDoc(doc(db, "user", String(body.id)), {
         nickname: body.nickname,
         state_message: body.state_message,
     });
 
-    return res.json(true);
+    return res.json({ status: 201 });
 });
 
 export default handler;

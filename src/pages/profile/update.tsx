@@ -42,6 +42,8 @@ const index = () => {
             state_message: userData.state_message,
         });
 
+        if (res.data.status !== 201) return;
+
         setUserAuth({
             ...userAuth,
             nickname: userData.nickname,

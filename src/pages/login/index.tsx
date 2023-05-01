@@ -20,7 +20,6 @@ const index = () => {
         }
 
         const result = await signIn("credentials", { username: email, password: password, redirect: false });
-        console.log(result);
         alert("로그인 되었습니다.");
     };
 

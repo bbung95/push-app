@@ -1,19 +1,20 @@
 import { authState, initialState } from "@/recoil/atoms/authState";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 const index = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [userAuth, setUserAuth] = useRecoilState(authState);
     const { data: session, status } = useSession();
 
     const handleOnClickLogout = async () => {
         if (!confirm("로그아웃 됩니다")) return;
 
-        localStorage.removeItem("jwt-token");
-        setUserAuth(initialState);
+        // localStorage.removeItem("jwt-token");
+        // setUserAuth(initialState);
+
+        const data = await signOut({ redirect: false, callbackUrl: "/foo" });
     };
 
     return (

@@ -5,7 +5,7 @@ interface JwtPayloadProps {
     id: number;
     email: string;
 }
-const secretKey: string = process.env.REACT_APP_JWT_SECRET_KEY ?? "";
+const secretKey: string = process.env.NEXT_PUBLIC_JWT_SECRET_KEY ?? "";
 
 export const createdToken = ({ id, email }: JwtPayloadProps) => {
     const token = jwt.sign({ id: id, email: email }, secretKey, {

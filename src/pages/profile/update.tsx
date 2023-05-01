@@ -89,7 +89,7 @@ const index = () => {
                                         type="text"
                                         name="nickname"
                                         placeholder="닉네임"
-                                        className="input input-bordered flex-1"
+                                        className="input input-bordered bg-white flex-1"
                                         value={userData.nickname}
                                         onChange={handleOnChangeInput}
                                     />
@@ -103,7 +103,7 @@ const index = () => {
                                         type="text"
                                         name="state_message"
                                         placeholder="소개글"
-                                        className="input input-bordered flex-1"
+                                        className="input input-bordered bg-white flex-1"
                                         value={userData.state_message}
                                         onChange={handleOnChangeInput}
                                     />

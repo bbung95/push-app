@@ -33,7 +33,7 @@ const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
                             <label className="label">
                                 <span className="label-text">이메일</span>
                             </label>
-                            <input type="text" placeholder="이메일을 입력해주세요." name="email" className="input input-bordered" value={userData.email} onChange={handleOnChangeInput} />
+                            <input type="text" placeholder="이메일을 입력해주세요." name="email" className="input input-bordered bg-white" value={userData.email} onChange={handleOnChangeInput} />
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -43,7 +43,7 @@ const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
                                 type="password"
                                 placeholder="비밀번호를 작성해주세요"
                                 name="password"
-                                className="input input-bordered"
+                                className="input input-bordered bg-white"
                                 value={userData.password}
                                 onChange={handleOnChangeInput}
                                 autoComplete="off"
@@ -58,7 +58,7 @@ const UserInputBox = ({ title, handle, type }: UserInputBoxProps) => {
                                     type="password"
                                     placeholder="비밀번호를 작성해주세요"
                                     name="passwordCheck"
-                                    className="input input-bordered"
+                                    className="input input-bordered bg-white"
                                     value={userData.passwordCheck}
                                     onChange={handleOnChangeInput}
                                     autoComplete="off"

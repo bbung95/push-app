@@ -8,7 +8,7 @@ const firebaseConfig = {
     storageBucket: "push-app-be4be.appspot.com",
     messagingSenderId: "294321336790",
     appId: "1:294321336790:web:9e5deccf2cd9a4a15c3477",
-    measurementId: process.env.REACT_APP_MEASUREMENT_ID,
+    measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
 };
 
 const init = () => {

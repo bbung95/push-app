@@ -1,5 +1,6 @@
 import { fetchGetAuthUser } from "@/api/UserFetchAPI";
 import { authState } from "@/recoil/atoms/authState";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
@@ -9,6 +10,10 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
     const { pathname } = router;
     const [userAuth, setUserAuth] = useRecoilState(authState);
 
+    const { data: session } = useSession();
+
+    console.log("session", session);
+
     const authURLs = ["/", "/login", "/signup"];
 
     const authRouter = () => {
@@ -16,7 +21,6 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
             // 로그인 O
             if (userAuth.id !== "") {
                 console.log("go home");
-
                 if (userAuth.first_login) {
                     router.push("/nickname");
                     return;
@@ -31,7 +35,6 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
                 router.push("/");
                 return;
             }
-
             if (userAuth.first_login) {
                 router.push("/nickname");
                 return;
@@ -41,6 +44,7 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
             }
         }
     };
+
     // authRouter();
 
     useEffect(() => {
@@ -51,8 +55,7 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
             // user정보를 업데이트
             (async () => {
                 const { data } = await fetchGetAuthUser(token);
-                console.log(data);
-                setUserAuth(data.data);
+                setUserAuth(data);
             })();
         }
     }, []);

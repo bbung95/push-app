@@ -14,6 +14,6 @@ export const initialState: UserAuthProps = {
 };
 
 export const authState = atom({
-    key: "authState", // unique ID (with respect to other atoms/selectors)
-    default: initialState, // default value (aka initial value)
+    key: "authState", // 유니크한 key값
+    default: initialState, // 기본 초기화 값
 });

@@ -1,4 +1,5 @@
 import { authState, initialState } from "@/recoil/atoms/authState";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -6,6 +7,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 const index = () => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [userAuth, setUserAuth] = useRecoilState(authState);
+    const { data: session, status } = useSession();
 
     const handleOnClickLogout = async () => {
         if (!confirm("로그아웃 됩니다")) return;
@@ -18,14 +20,14 @@ const index = () => {
         <main className="h-full bg-white w-full overflow-auto pb-28">
             <div className="w-11/12 m-auto pt-4">
                 <h1 className="text-3xl font-bold">마이페이지</h1>
-                {userAuth.id !== "" && (
+                {session?.user && (
                     <>
                         <div className="relative mt-4 h-56 p-4 flex flex-col bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                             <div className="flex gap-3">
                                 <img className="w-28 h-28 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
                                 <div className="w-full">
-                                    <span className="text-2xl flex-1 font-bold text-gray-700">{userAuth.nickname}</span>
-                                    <p className="mt-4 line-clamp-2">{userAuth.state_message}</p>
+                                    <span className="text-2xl flex-1 font-bold text-gray-700">{session.user.nickname}</span>
+                                    <p className="mt-4 line-clamp-2">{session.user.state_message}</p>
                                 </div>
                             </div>
 

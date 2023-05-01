@@ -21,26 +21,6 @@ export const fetchEmailCheck = async (email: string) => {
     return res;
 };
 
-// 로그인
-export const fetchLoginUser = async (data: UserAddProps) => {
-    const res = await axios({
-        url: "/api/user/login",
-        method: "post",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        data: data,
-    });
-
-    if (res.data.status >= 400) {
-        console.error(`status ${res.data.status}`, res.data.code);
-        alert("문제가 발생했습니다.");
-        return false;
-    }
-
-    return res;
-};
-
 // 회원가입
 export const fetchUserAdd = async (data: UserAddProps) => {
     const res = await axios({

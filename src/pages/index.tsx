@@ -17,9 +17,6 @@ export default function index() {
                 <Link href={"/signup"} className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md">
                     회원가입
                 </Link>
-                <button className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md" onClick={() => signIn()}>
-                    next-auth-login
-                </button>
                 {/* <Link href={"/home"} className="btn btn-warning text-gray-600 drop-shadow-md">
                     kakao
                 </Link>

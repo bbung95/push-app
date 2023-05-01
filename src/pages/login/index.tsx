@@ -3,17 +3,10 @@ import Link from "next/link";
 import React from "react";
 import { UserFormProps } from "@/@types/userType";
 import { UserAuthErrorCodes } from "@/@types/errors";
-import { fetchGetAuthUser, fetchLoginUser, fetchUserAdd } from "@/api/UserFetchAPI";
-import { useRouter } from "next/router";
-import { useRecoilState } from "recoil";
-import { authState } from "@/recoil/atoms/authState";
+import { signIn } from "next-auth/react";
 
 const index = () => {
-    const [userAuth, setUserAuth] = useRecoilState(authState);
-
     const handleOnClickLogin = async ({ email, password }: UserFormProps) => {
-        console.log("로그인 시작");
-
         if (email === "") {
             const errorMessage = UserAuthErrorCodes["invalid-email"];
             alert(errorMessage);
@@ -26,15 +19,9 @@ const index = () => {
             return;
         }
 
-        const res = await fetchLoginUser({ email, password });
-        if (!res) {
-            return;
-        }
-
-        localStorage.setItem("jwt-token", res.data.data.token);
-        const { data } = await fetchGetAuthUser(res.data.data.token);
+        const result = await signIn("credentials", { username: email, password: password, redirect: false });
+        console.log(result);
         alert("로그인 되었습니다.");
-        setUserAuth(data.data);
     };
 
     return (

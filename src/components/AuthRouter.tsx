@@ -8,61 +8,65 @@ import { useRecoilState } from "recoil";
 const AuthRouter = ({ children }: { children: JSX.Element }) => {
     const router = useRouter();
     const { pathname } = router;
-    const [userAuth, setUserAuth] = useRecoilState(authState);
+    // const [userAuth, setUserAuth] = useRecoilState(authState);
 
-    const { data: session } = useSession();
-
-    console.log("session", session);
+    const { data: session, status } = useSession();
 
     const authURLs = ["/", "/login", "/signup"];
+
+    console.log("seesion", session);
 
     const authRouter = () => {
         if (authURLs.includes(pathname)) {
             // 로그인 O
-            if (userAuth.id !== "") {
+            if (session) {
                 console.log("go home");
-                if (userAuth.first_login) {
-                    router.push("/nickname");
-                    return;
-                }
+                // if (session.first_login) {
+                //     router.push("/nickname");
+                //     return;
+                // }
                 router.push("/home");
                 return;
             }
         } else {
             // 로그인 X
-            if (userAuth.id === "") {
+            if (!session) {
                 console.log("go root");
                 router.push("/");
                 return;
             }
-            if (userAuth.first_login) {
-                router.push("/nickname");
-                return;
-            } else if (pathname === "/nickname") {
-                router.push("/home");
-                return;
-            }
+            // if (userAuth.first_login) {
+            //     router.push("/nickname");
+            //     return;
+            // } else if (pathname === "/nickname") {
+            //     router.push("/home");
+            //     return;
+            // }
         }
     };
 
     // authRouter();
 
-    useEffect(() => {
-        const token = localStorage.getItem("jwt-token");
+    // useEffect(() => {
+    //     const token = localStorage.getItem("jwt-token");
 
-        if (token) {
-            // 로그인 상태
-            // user정보를 업데이트
-            (async () => {
-                const { data } = await fetchGetAuthUser(token);
-                setUserAuth(data);
-            })();
-        }
-    }, []);
+    //     if (token) {
+    //         // 로그인 상태
+    //         // user정보를 업데이트
+    //         (async () => {
+    //             const { data } = await fetchGetAuthUser(token);
+    //             setUserAuth(data);
+    //         })();
+    //     }
+    // }, []);
 
     useEffect(() => {
         authRouter();
-    }, [userAuth]);
+    }, [session, status]);
+
+    if (status === "loading") {
+        return <div>Loading...</div>;
+    }
 
     return <>{children}</>;
 };

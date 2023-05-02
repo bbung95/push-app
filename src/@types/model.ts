@@ -2,8 +2,8 @@ import { FieldValue } from "firebase/firestore";
 
 export interface UserProps {
     id: number;
-    email: string;
-    password: string;
+    email?: string;
+    password?: string;
     nickname: string;
     profile_img: string;
     state_message?: string;
@@ -12,4 +12,6 @@ export interface UserProps {
     modified_date: FieldValue;
     login_date: FieldValue;
     token: string;
+    auth_type: string;
+    oauth_id?: number;
 }

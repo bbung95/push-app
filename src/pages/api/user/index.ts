@@ -30,6 +30,7 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>();
 //         });
 // })
 
+// 이메일 중복 체크
 handler.get(async (req, res) => {
     const email = req.query.email;
     const qeury = query(collection(db, "user"), where("email", "==", email));
@@ -42,6 +43,7 @@ handler.get(async (req, res) => {
     return res.json(true);
 });
 
+// 회원가입
 handler.post(async (req, res) => {
     const body = req.body;
 
@@ -60,11 +62,12 @@ handler.post(async (req, res) => {
         modified_date: serverTimestamp(),
         login_date: serverTimestamp(),
         token: "",
+        auth_type: "email",
     };
 
     await setDoc(doc(db, "user", String(user.id)), user);
 
-    return res.json(true);
+    return res.json({ status: 201 });
 });
 
 handler.put(async (req, res) => {

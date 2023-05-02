@@ -5,16 +5,14 @@ import Link from "next/link";
 import axios from "axios";
 import { fetchNicknameCheck, fetchUserProfileUpdate } from "@/api/UserFetchAPI";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 const index = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { data: session, status, update } = useSession();
     const router = useRouter();
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [userAuth, setUserAuth] = useRecoilState(authState);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [userData, setUserData] = useState({
-        nickname: userAuth.nickname,
-        state_message: userAuth.state_message,
+        nickname: "",
+        state_message: "",
     });
 
     const handleOnChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,37 +29,31 @@ const index = () => {
 
         const { data } = await fetchNicknameCheck(userData.nickname);
 
-        if (userData.nickname !== userAuth.nickname && !data) {
+        if (userData.nickname !== session?.user.nickname && !data) {
             alert("해당 닉네임은 사용중입니다.");
             return;
         }
 
         const res = await fetchUserProfileUpdate({
-            id: userAuth.id,
+            id: String(session?.user.id),
             nickname: userData.nickname,
             state_message: userData.state_message,
         });
 
         if (res.data.status !== 201) return;
 
-        setUserAuth({
-            ...userAuth,
-            nickname: userData.nickname,
-            state_message: userData.state_message,
-        });
-
         alert("프로필이 수정되었습니다.");
-
+        // session 업데이트
+        await update({ nickname: userData.nickname, state_message: userData.state_message });
         router.push("/profile");
     };
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
         setUserData({
-            nickname: userAuth.nickname,
-            state_message: userAuth.state_message,
+            nickname: session?.user.nickname ?? "",
+            state_message: session?.user.state_message ?? "",
         });
-    }, [userAuth]);
+    }, [status]);
 
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
@@ -72,7 +64,7 @@ const index = () => {
                     </Link>
                     <h1 className="text-3xl font-bold">프로필 수정</h1>
                 </div>
-                {userAuth.id !== "" && (
+                {status === "authenticated" && (
                     <>
                         <div className="mt-4 p-4 flex flex-col bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                             <div className="flex flex-col gap-3">

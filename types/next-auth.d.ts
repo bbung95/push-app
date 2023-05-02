@@ -12,7 +12,7 @@ declare module "next-auth" {
             nickname?: string;
             profile_img: string;
             state_message?: string;
-            first_login: boolean;
+            first_login?: boolean;
         };
     }
 }

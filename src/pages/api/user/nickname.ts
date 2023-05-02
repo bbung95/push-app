@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import nextConnect from "next-connect";
+import { getSession } from "next-auth/react";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
@@ -21,11 +22,7 @@ handler.get(async (req, res) => {
 
 // 닉네임 업데이트
 handler.put(async (req, res) => {
-    console.log("들어왓나");
-
     const body = req.body;
-
-    console.log(body);
 
     try {
         await updateDoc(doc(db, "user", String(body.id)), { nickname: body.nickname, first_login: false });

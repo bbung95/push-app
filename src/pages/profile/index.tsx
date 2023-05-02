@@ -6,13 +6,10 @@ import React from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
 
 const index = () => {
-    const { data: session, status } = useSession();
+    const { data: session } = useSession();
 
     const handleOnClickLogout = async () => {
         if (!confirm("로그아웃 됩니다")) return;
-
-        // localStorage.removeItem("jwt-token");
-        // setUserAuth(initialState);
 
         const data = await signOut({ redirect: false, callbackUrl: "/foo" });
     };

@@ -1,15 +1,10 @@
 import { fetchNicknameCheck, fetchNicknameUpdate } from "@/api/UserFetchAPI";
-import { authState } from "@/recoil/atoms/authState";
-import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
 
 const nickname = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [userAuth, setUserAuth] = useRecoilState(authState);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { data: session, update } = useSession();
     const [nickname, setNickname] = useState("");
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [inputState, setInputState] = useState({
         text: "",
         isDisabled: false,
@@ -33,14 +28,15 @@ const nickname = () => {
 
     const handleOnSubmitNickname = async () => {
         if (!inputState.isDisabled) return;
-        const res = await fetchNicknameUpdate({ id: userAuth.id, nickname: nickname });
+        const res = await fetchNicknameUpdate({ id: String(session?.user.id), nickname: nickname });
 
         if (res.data.status === 201) {
-            setUserAuth({ ...userAuth, first_login: false, nickname: nickname });
+            // session이 변경되면서 router 동작
+            alert("닉네임이 변경되었습니다.");
+            update({ first_login: false, nickname: nickname });
         }
     };
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
         if (inputState.isDisabled) {
             setInputState({ text: "", isDisabled: false });

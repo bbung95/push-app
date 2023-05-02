@@ -1,15 +1,14 @@
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function index() {
-    const { data: session } = useSession();
-
-    console.log("session", session);
+    const handleOAuthLogin = async (type: string) => {
+        const result = await signIn(type, { callbackUrl: "/home" });
+    };
 
     return (
         <div className="h-full bg-main-color">
-            {session && session.user?.email}
-
             <div className="flex flex-col gap-4 w-9/12 m-auto pt-96">
                 <Link href={"/login"} className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md">
                     로그인
@@ -17,10 +16,10 @@ export default function index() {
                 <Link href={"/signup"} className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md">
                     회원가입
                 </Link>
-                {/* <Link href={"/home"} className="btn btn-warning text-gray-600 drop-shadow-md">
+                <button className="btn btn-warning text-gray-600 drop-shadow-md" onClick={() => handleOAuthLogin("kakao")}>
                     kakao
-                </Link>
-                <button className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md" onClick={handlerGoogleLogin}>
+                </button>
+                {/* <button className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md" onClick={handlerGoogleLogin}>
                     google
                 </button> */}
             </div>

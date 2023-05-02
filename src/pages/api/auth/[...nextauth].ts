@@ -1,60 +1,72 @@
-import { UserAuthProps } from "@/@types/userType";
-import { db } from "@/lib/firebase-init";
-import { matchPassword } from "@/utils/AuthUtil";
-import { DocumentData, collection, doc, getDocs, query, serverTimestamp, updateDoc, where } from "firebase/firestore";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-
-const loginAuth = async (email: string, password: string) => {
-    const qeury = query(collection(db, "user"), where("email", "==", email));
-    const findUsers = await getDocs(qeury);
-
-    if (findUsers.size === 0) {
-        return null;
-    }
-
-    let findUser: DocumentData[] = [];
-    findUsers.forEach((doc) => findUser.push(doc.data()));
-
-    if (!matchPassword(password, findUser[0].password)) {
-        return null;
-    }
-
-    await updateDoc(doc(db, "user", String(findUser[0].id)), { login_date: serverTimestamp() });
-
-    return {
-        id: findUser[0].id,
-        email: findUser[0].email,
-        nickname: findUser[0].nickname,
-        profile_img: findUser[0].profile_img,
-        state_message: findUser[0].state_message,
-        first_login: findUser[0].first_login,
-    };
-};
+import KakaoProvider from "next-auth/providers/kakao";
+import { loginCredential, loginOAuth } from "./auth";
 
 export const authOptions = {
+    secret: process.env.NEXT_PUBLIC_SECRET_KEY,
     providers: [
         CredentialsProvider({
-            // The name to display on the sign in form (e.g. "Sign in with...")
             name: "Credentials",
-            // `credentials` is used to generate a form on the sign in page.
-            // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-            // e.g. domain, username, password, 2FA token, etc.
-            // You can pass any HTML attribute to the <input> tag through the object.
             credentials: {
                 username: { label: "Username", type: "text", placeholder: "jsmith" },
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials, req) {
                 // 로그인 API 동작
-                const user = await loginAuth(credentials?.username ?? "", credentials?.password ?? "");
+                const findUser = await loginCredential(credentials?.username ?? "", credentials?.password ?? "");
 
-                return user;
+                if (!findUser) {
+                    return null;
+                }
+
+                return {
+                    id: findUser.id,
+                    nickname: findUser.nickname,
+                    state_message: findUser.state_message,
+                    profile_img: findUser.profile_img,
+                    first_login: findUser.first_login,
+                };
+            },
+        }),
+        KakaoProvider({
+            clientId: process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID ?? "",
+            clientSecret: process.env.NEXT_PUBLIC_KAKAO_CLIENT_SECRET ?? "",
+            authorization: {
+                params: {
+                    scope: "account_email",
+                },
+            },
+            async profile(profile) {
+                const findUser = await loginOAuth(profile.id, "kakao");
+
+                console.log("findUser", findUser);
+
+                return {
+                    id: findUser.id,
+                    nickname: findUser.nickname,
+                    state_message: findUser.state_message,
+                    profile_img: findUser.profile_img,
+                    first_login: findUser.first_login,
+                };
             },
         }),
     ],
     callbacks: {
-        async jwt({ token, user }: any) {
+        async jwt({ token, trigger, session, user, account, profile }: any) {
+            if (trigger === "update") {
+                if (typeof session.nickname === "string") {
+                    token.user.nickname = session.nickname || token.user.nickname;
+                }
+                if (typeof session.nickname === "string") {
+                    token.user.state_message = session.state_message || token.user.state_message;
+                }
+
+                if (typeof session.first_login === "boolean") {
+                    console.log("emfdjdhk");
+                    token.user.first_login = false;
+                }
+            }
             user && (token.user = user); // authorize에 리턴했던 값이 user 정보에 있면 token에 추가.
             return Promise.resolve(token);
         },
@@ -67,6 +79,16 @@ export const authOptions = {
             }
             return Promise.resolve(session);
         },
+        // async signOut({ account, session, ...rest }: any) {
+        //     // 로그아웃 이후에 캐시된 인증 정보 삭제
+        //     await KakaoProvider();
+        //     await providers.Kakao.clearAccessToken();
+        //     await providers.Kakao.clearRefreshToken();
+
+        //     KakaoProvider.revokeAuthorization()
+
+        //     return Promise.resolve();
+        // },
     },
 };
 

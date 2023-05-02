@@ -1,5 +1,5 @@
 import { fetchUserTokenUpdate } from "@/api/UserFetchAPI";
-import { fcmToken, requestPermission } from "@/utils/Notification";
+import { fcmToken } from "@/utils/Notification";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";

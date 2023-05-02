@@ -1,10 +1,8 @@
-import { fetchDeleteUserToken, fetchUserTokenUpdate } from "@/api/UserFetchAPI";
-import { authState, initialState } from "@/recoil/atoms/authState";
+import { fetchDeleteUserToken } from "@/api/UserFetchAPI";
+import { fcmToken } from "@/utils/Notification";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
 
 const index = () => {
     const { data: session } = useSession();
@@ -35,6 +33,7 @@ const index = () => {
                                 <img src="/icon/edit.svg" alt="" width={28} height={28} />
                             </Link>
                         </div>
+                        <p>{fcmToken.token}</p>
 
                         <div className="flex flex-col mt-4 gap-2">
                             <Link href="/profile/locker" className="btn btn-info text-white text-lg">

@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { DocumentData, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { DocumentData, collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import nextConnect from "next-connect";
-import { verifiedToken } from "@/utils/AuthUtil";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 

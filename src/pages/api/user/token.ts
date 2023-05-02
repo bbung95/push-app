@@ -1,28 +1,41 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { DocumentData, collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import nextConnect from "next-connect";
 import { verifiedToken } from "@/utils/AuthUtil";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
-// jwt token get user
-handler.get(async (req, res) => {
-    const token = req.headers.authorization ?? "";
-    const data: any = verifiedToken(token);
-
-    const findUser = await getDoc(doc(db, "user", String(data.id)));
-
-    return res.json({ status: 200, data: findUser.data() });
-});
-
 // FCM Token 업데이트
 handler.put(async (req, res) => {
     const body = req.body;
+
+    const findUser = await findUserByToken(body.token);
+
+    if (findUser) {
+        await updateDoc(doc(db, "user", String(findUser.id)), { token: "" });
+    }
 
     await updateDoc(doc(db, "user", body.id), { token: body.token });
 
     res.json({ status: 201 });
 });
+
+handler.delete(async (req, res) => {
+    const id = req.query.id;
+
+    await updateDoc(doc(db, "user", String(id)), { token: "" });
+
+    res.json({ status: 201 });
+});
+
+const findUserByToken = async (token: string) => {
+    const qeury = query(collection(db, "user"), where("token", "==", token));
+    const findUsers = await getDocs(qeury);
+    const findUser: DocumentData[] = [];
+    findUsers.forEach((doc) => findUser.push(doc.data()));
+
+    return findUser[0];
+};
 
 export default handler;

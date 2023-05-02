@@ -1,3 +1,4 @@
+import { fetchDeleteUserToken, fetchUserTokenUpdate } from "@/api/UserFetchAPI";
 import { authState, initialState } from "@/recoil/atoms/authState";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -11,6 +12,7 @@ const index = () => {
     const handleOnClickLogout = async () => {
         if (!confirm("로그아웃 됩니다")) return;
 
+        await fetchDeleteUserToken(String(session?.user.id));
         const data = await signOut({ redirect: false, callbackUrl: "/foo" });
     };
 

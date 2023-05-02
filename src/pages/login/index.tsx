@@ -19,7 +19,8 @@ const index = () => {
             return;
         }
 
-        const result = await signIn("credentials", { username: email, password: password, redirect: false });
+        await signIn("credentials", { username: email, password: password, redirect: false });
+
         alert("로그인 되었습니다.");
     };
 

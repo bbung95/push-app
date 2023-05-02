@@ -1,3 +1,5 @@
+import { fetchUserTokenUpdate } from "@/api/UserFetchAPI";
+import { fcmToken, requestPermission } from "@/utils/Notification";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -10,8 +12,6 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
     const authURLs = ["/", "/login", "/signup"];
 
     const authRouter = () => {
-        console.log("authrouter", status, pathname);
-
         if (authURLs.includes(pathname)) {
             // 로그인 O
             if (status === "authenticated") {
@@ -44,6 +44,10 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
 
     useEffect(() => {
         authRouter();
+
+        if (status === "authenticated") {
+            fetchUserTokenUpdate({ id: String(session.user.id), token: fcmToken.token });
+        }
     }, [session]);
 
     if (status === "loading") {

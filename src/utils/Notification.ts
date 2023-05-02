@@ -1,6 +1,8 @@
 import { app } from "@/lib/firebase-init";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 
+export const fcmToken = { token: "" };
+
 export const requestPermission = async () => {
     if (typeof window !== "undefined" && typeof window.navigator !== "undefined") {
         const messaging = getMessaging(app);
@@ -17,12 +19,9 @@ export const requestPermission = async () => {
                 notification.onclick = () => (location.href = "/");
             });
 
-            return token;
+            fcmToken.token = token;
         } else if (permission === "denied") {
             console.log("denied");
-            return "";
         }
-    } else {
-        return "";
     }
 };

@@ -15,11 +15,9 @@ export const authOptions = {
             async authorize(credentials, req) {
                 // 로그인 API 동작
                 const findUser = await loginCredential(credentials?.username ?? "", credentials?.password ?? "");
-
                 if (!findUser) {
                     return null;
                 }
-
                 return {
                     id: findUser.id,
                     nickname: findUser.nickname,
@@ -39,9 +37,6 @@ export const authOptions = {
             },
             async profile(profile) {
                 const findUser = await loginOAuth(profile.id, "kakao");
-
-                console.log("findUser", findUser);
-
                 return {
                     id: findUser.id,
                     nickname: findUser.nickname,

@@ -1,3 +1,4 @@
+import { query } from "firebase/firestore";
 import { async } from "@firebase/util";
 import { UserAddProps, UserNicknameUpdateProps, UserTokenUpdateProps, UserUpdateProps } from "@/@types/userType";
 import axios from "axios";
@@ -63,6 +64,18 @@ export const fetchUserTokenUpdate = async (data: UserTokenUpdateProps) => {
     return res;
 };
 
+export const fetchDeleteUserToken = async (id: string) => {
+    const res = await axios({
+        method: "delete",
+        url: "/api/user/token",
+        params: {
+            id: id,
+        },
+    });
+
+    return res;
+};
+
 // profile 업데이트
 export const fetchUserProfileUpdate = async (data: UserUpdateProps) => {
     const res = await axios({
@@ -73,12 +86,6 @@ export const fetchUserProfileUpdate = async (data: UserUpdateProps) => {
         },
         data: data,
     });
-
-    return res;
-};
-
-export const fetchGetAuthUser = async (token: string) => {
-    const res = await axios.get("/api/user/token", { headers: { Authorization: "Bearer " + token } });
 
     return res;
 };

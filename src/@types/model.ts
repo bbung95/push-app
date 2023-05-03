@@ -15,3 +15,11 @@ export interface UserProps {
     auth_type: string;
     oauth_id?: number;
 }
+
+export interface FriendProps {
+    id: number;
+    user_id: number;
+    target_id: number;
+    created_date: FieldValue;
+    accept: boolean;
+}

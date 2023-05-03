@@ -22,6 +22,7 @@ export const requestPermission = async () => {
             fcmToken.token = token;
         } else if (permission === "denied") {
             console.log("denied");
+            alert("denied");
             fcmToken.token = "";
         }
     } else {

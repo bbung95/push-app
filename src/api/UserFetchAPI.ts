@@ -64,6 +64,7 @@ export const fetchUserTokenUpdate = async (data: UserTokenUpdateProps) => {
     return res;
 };
 
+// FCM Token 삭제
 export const fetchDeleteUserToken = async (id: string) => {
     const res = await axios({
         method: "delete",
@@ -85,6 +86,19 @@ export const fetchUserProfileUpdate = async (data: UserUpdateProps) => {
             "Content-Type": "application/json",
         },
         data: data,
+    });
+
+    return res;
+};
+
+// 유저 검색
+export const fetchUserSearch = async (keyword: string) => {
+    const res = await axios({
+        url: "/api/user/search",
+        method: "get",
+        params: {
+            keyword: keyword,
+        },
     });
 
     return res;

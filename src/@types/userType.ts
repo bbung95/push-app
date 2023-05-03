@@ -36,3 +36,10 @@ export interface UserUpdateProps {
     nickname: string;
     state_message?: string;
 }
+
+export interface UserSearchProps {
+    id: number;
+    nickname: string;
+    state_message: string;
+    profile_img: string;
+}

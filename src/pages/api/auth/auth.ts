@@ -9,6 +9,7 @@ export const loginCredential = async (email: string, password: string) => {
     const findUsers = await getDocs(qeury);
 
     if (findUsers.size === 0) {
+        console.error("404", "이메일을 확인해주세요.");
         return;
     }
 
@@ -16,6 +17,7 @@ export const loginCredential = async (email: string, password: string) => {
     findUsers.forEach((doc) => findUser.push(doc.data()));
 
     if (!matchPassword(password, findUser[0].password)) {
+        console.error("404", "비밀번호를 확인해주세요.");
         return;
     }
 

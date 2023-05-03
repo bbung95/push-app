@@ -6,6 +6,7 @@ import nextConnect from "next-connect";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
+// 유저 정보
 handler.get(async (req, res) => {
     const id = String(req.query.id);
 

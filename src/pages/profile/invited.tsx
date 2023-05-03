@@ -1,7 +1,26 @@
+import { InvitedItemProps } from "@/@types/inviteType";
+import { fetchInvitedList } from "@/api/FriendFetchAPI";
+import InviteItem from "@/components/InviteItem";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const locker = () => {
+    const { data: session } = useSession();
+    const [inviteds, setInviteds] = useState<InvitedItemProps[]>([]);
+
+    useEffect(() => {
+        (async () => {
+            const res = await fetchInvitedList(Number(session?.user.id));
+
+            setInviteds(res.data.data);
+        })();
+    }, []);
+
+    const handleChangeInvited = (id: number) => {
+        setInviteds(inviteds.filter((item: InvitedItemProps) => item.id != id));
+    };
+
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
             <div className="w-11/12 m-auto pt-4">
@@ -13,20 +32,9 @@ const locker = () => {
                 </div>
 
                 <div className="flex flex-col mt-4 gap-2">
-                    <div className="mt-4 h-28 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
-                        <div className="flex gap-3">
-                            <img className="w-18 h-18 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
-                            <span className="text-xl flex-1 font-bold text-gray-700">Alice Smith</span>
-                            <div className="flex gap-2 items-end">
-                                <button className="btn btn-accent p-0 w-12">
-                                    <img src="/icon/checkmark.svg" alt="" width={24} height={24} />
-                                </button>
-                                <button className="btn btn-error p-0 w-12">
-                                    <img src="/icon/close.svg" alt="" width={24} height={24} />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    {inviteds.map((item, idx) => {
+                        return <InviteItem key={idx} info={item} handle={handleChangeInvited} />;
+                    })}
                 </div>
             </div>
         </main>

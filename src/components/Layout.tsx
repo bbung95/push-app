@@ -10,7 +10,6 @@ const Layout = ({ children }: { children: JSX.Element }) => {
 
     useEffect(() => {
         requestPermission();
-        alert("requestPermission");
     }, []);
 
     const pahts = ["/home", "/friend", "/profile"];

@@ -1,20 +1,20 @@
 {
     "manifest_version": 2,
-    "name": "푸쉬푸시~",
-    "short_name": "Push-app",
+    "name": "push-app",
+    "short_name": "push",
     "icons": [
         {
-            "src": "favicon.ico",
+            "src": "/image/icon-192x192.png",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "favicon.ico",
+            "src": "/image/icon-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
         }
     ],
-    "display": "fullscreen",
+    "display": "standalone",
     "orientation": "landscape",
     "background_color": "#1689D8",
     "theme_color": "#1689D8",

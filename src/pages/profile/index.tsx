@@ -1,5 +1,5 @@
 import { fetchDeleteUserToken } from "@/api/UserFetchAPI";
-import { fcmToken } from "@/utils/Notification";
+import { fcmToken, requestPermission } from "@/utils/Notification";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
@@ -33,6 +33,9 @@ const index = () => {
                                 <img src="/icon/edit.svg" alt="" width={28} height={28} />
                             </Link>
                         </div>
+                        <button className="btn btn-accent" onClick={requestPermission}>
+                            알림 설정
+                        </button>
                         <p>{fcmToken.token}</p>
 
                         <div className="flex flex-col mt-4 gap-2">

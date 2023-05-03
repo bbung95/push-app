@@ -1,3 +1,5 @@
+const withPWA = require("next-pwa");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: false,
@@ -5,5 +7,11 @@ const nextConfig = {
         RECOIL_DUPLICATE_ATOM_KEY_CHECKING_ENABLED: "false",
     },
 };
+
+module.exports = withPWA({
+    pwa: {
+        dest: "public",
+    },
+});
 
 module.exports = nextConfig;

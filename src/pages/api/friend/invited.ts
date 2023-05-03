@@ -40,15 +40,16 @@ handler.post(async (req, res) => {
 
     const index = await getIndex("friend");
 
-    const invited: FriendProps = {
+    const friend: FriendProps = {
         id: index,
         user_id: body.id,
         target_id: body.target_id,
         created_date: serverTimestamp(),
         accept: false,
+        like: false,
     };
 
-    await setDoc(doc(db, "friend", String(invited.id)), invited);
+    await setDoc(doc(db, "friend", String(friend.id)), friend);
 
     return res.json({ status: 201 });
 });
@@ -60,14 +61,15 @@ handler.put(async (req, res) => {
     await updateDoc(doc(db, "friend", String(body.id)), { accept: true });
 
     const index = await getIndex("friend");
-    const invited: FriendProps = {
+    const friend: FriendProps = {
         id: index,
         user_id: body.user_id,
         target_id: body.target_id,
         created_date: serverTimestamp(),
         accept: true,
+        like: false,
     };
-    await setDoc(doc(db, "friend", String(invited.id)), invited);
+    await setDoc(doc(db, "friend", String(friend.id)), friend);
 
     return res.json({ status: 201 });
 });

@@ -2,7 +2,7 @@ import { UserProps } from "@/@types/model";
 import { db } from "@/lib/firebase-init";
 import { matchPassword } from "@/utils/AuthUtil";
 import { getIndex } from "@/utils/DBUtill";
-import { DocumentData, and, collection, doc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
+import { DocumentData, collection, doc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 
 export const loginCredential = async (email: string, password: string) => {
     const qeury = query(collection(db, "user"), where("email", "==", email));

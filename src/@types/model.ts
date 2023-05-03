@@ -21,5 +21,6 @@ export interface FriendProps {
     user_id: number;
     target_id: number;
     created_date: FieldValue;
+    like: boolean;
     accept: boolean;
 }

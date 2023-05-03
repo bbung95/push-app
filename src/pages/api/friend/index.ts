@@ -1,34 +1,35 @@
-// import { NextApiRequest, NextApiResponse } from "next";
-// import { DocumentData, collection, getDocs, query, where } from "firebase/firestore";
-// import { db } from "@/lib/firebase-init";
-// import nextConnect from "next-connect";
+import { NextApiRequest, NextApiResponse } from "next";
+import { DocumentData, collection, doc, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
+import { db } from "@/lib/firebase-init";
+import nextConnect from "next-connect";
+import { FriendItemProps } from "@/@types/friendType";
 
-// const handler = nextConnect<NextApiRequest, NextApiResponse>();
+const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
-// handler.post(async (req, res) => {
-//     const body = req.body;
+handler.get(async (req, res) => {
+    const id = req.query.id;
 
-//     const index = await getIndex("friend");
-//     const incoderPwd = await incoderPassword(body.password);
+    const qeury = query(collection(db, "friend"), where("user_id", "==", Number(id)), where("accept", "==", true));
+    const findFriends = await getDocs(qeury);
+    const data: any = [];
 
-//     const user: UserProps = {
-//         id: index,
-//         email: body.email,
-//         password: incoderPwd,
-//         nickname: "",
-//         profile_img: "",
-//         state_message: "",
-//         first_login: true,
-//         created_date: serverTimestamp(),
-//         modified_date: serverTimestamp(),
-//         login_date: serverTimestamp(),
-//         token: "",
-//         auth_type: "email",
-//     };
+    findFriends.forEach(async (item) => {
+        data.push(item.data());
+    });
 
-//     await setDoc(doc(db, "user", String(user.id)), user);
+    const newData: FriendItemProps[] = [];
+    for (let value of data) {
+        const findUser = await getDoc(doc(db, "user", String(value.target_id)));
+        newData.push({
+            id: value.id,
+            user_id: findUser.data()?.id,
+            nickname: findUser.data()?.nickname,
+            state_message: findUser.data()?.state_message,
+            like: value.like,
+        });
+    }
 
-//     return res.json({ status: 200, data: data });
-// });
+    return res.json({ status: 200, data: newData });
+});
 
-// export default handler;
+export default handler;

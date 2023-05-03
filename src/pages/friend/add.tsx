@@ -29,7 +29,7 @@ const index = () => {
 
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
-            <div className="relative w-11/12 h-full m-auto pt-4">
+            <div className="w-11/12 h-full m-auto pt-4">
                 <div className="flex gap-3 items-center">
                     <Link href={"/friend"}>
                         <img src="/icon/arrow-back.svg" alt="" width={28} height={28} />

@@ -2,13 +2,36 @@ import { FriendAddProps } from "@/@types/friendType";
 import { InvitedAcceptProps } from "@/@types/inviteType";
 import axios from "axios";
 
+// 친구 정보
+export const fetchGetFriend = async (id: number) => {
+    const res = await axios({
+        method: "get",
+        url: `/api/friend/${id}`,
+    });
+
+    return res;
+};
+
 // 친구 검색
 export const fetchFriendSearch = async (keyword: string) => {
     const res = await axios({
-        url: "/api/user/search",
+        url: "/api/friend/search",
         method: "get",
         params: {
             keyword: keyword,
+        },
+    });
+
+    return res;
+};
+
+// 친구 목록
+export const fetchFriendList = async (id: number) => {
+    const res = await axios({
+        method: "get",
+        url: "/api/friend",
+        params: {
+            id: id,
         },
     });
 
@@ -42,7 +65,7 @@ export const fetchInvitedList = async (id: number) => {
     return res;
 };
 
-// 초대 수럭
+// 초대 수락
 export const fetchAcceptInvited = async (data: InvitedAcceptProps) => {
     const res = await axios({
         method: "put",

@@ -1,14 +1,5 @@
-import { query } from "firebase/firestore";
-import { async } from "@firebase/util";
 import { UserAddProps, UserNicknameUpdateProps, UserTokenUpdateProps, UserUpdateProps } from "@/@types/userType";
 import axios from "axios";
-
-// 유저 가져오기
-export const fetchGetUser = async (id: string) => {
-    const res = await axios.get(`/api/user/${id}`);
-
-    return res;
-};
 
 // 닉네임 중복체크
 export const fetchNicknameCheck = async (nickname: string) => {

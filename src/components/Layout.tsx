@@ -10,13 +10,16 @@ const Layout = ({ children }: { children: JSX.Element }) => {
 
     useEffect(() => {
         requestPermission();
+        alert("requestPermission");
     }, []);
+
+    const pahts = ["/home", "/friend", "/profile"];
 
     return (
         <AuthRouter>
             <div className="h-screen max-w-screen-sm w-full m-auto">
                 {children}
-                {pathname !== "/" && pathname !== "/login" && pathname !== "/signup" && pathname !== "/nickname" ? <Navigation /> : ""}
+                {pahts.includes(pathname) && <Navigation />}
             </div>
         </AuthRouter>
     );

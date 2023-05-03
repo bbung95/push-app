@@ -9,6 +9,7 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
     const { pathname } = router;
     const { data: session, status } = useSession();
 
+    // 상수 export
     const authURLs = ["/", "/login", "/signup"];
 
     const authRouter = () => {

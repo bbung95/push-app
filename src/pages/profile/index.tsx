@@ -33,10 +33,6 @@ const index = () => {
                                 <img src="/icon/edit.svg" alt="" width={28} height={28} />
                             </Link>
                         </div>
-                        <button className="btn btn-accent" onClick={requestPermission}>
-                            알림 설정
-                        </button>
-                        <p>{fcmToken.token}</p>
                         <div className="flex flex-col mt-4 gap-2">
                             <Link href="/profile/locker" className="btn btn-info text-white text-lg">
                                 보관함
@@ -44,6 +40,9 @@ const index = () => {
                             <Link href="/profile/invited" className="btn btn-info text-white text-lg">
                                 초대목록
                             </Link>
+                            <button className="btn btn-accent text-white text-lg" onClick={requestPermission}>
+                                알림 설정
+                            </button>
                             <button className="btn btn-error text-white text-lg" onClick={handleOnClickLogout}>
                                 로그아웃
                             </button>

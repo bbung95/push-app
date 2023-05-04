@@ -9,8 +9,8 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>();
 handler.get(async (req, res) => {
     const id = req.query.id;
 
-    const qeury = query(collection(db, "friend"), where("user_id", "==", Number(id)), where("accept", "==", true));
-    const findFriends = await getDocs(qeury);
+    const q = query(collection(db, "friend"), where("user_id", "==", Number(id)), where("accept", "==", true));
+    const findFriends = await getDocs(q);
     const data: any = [];
 
     findFriends.forEach(async (item) => {

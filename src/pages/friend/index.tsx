@@ -1,5 +1,5 @@
 import { FriendItemProps } from "@/@types/friendType";
-import { fetchFriendList, fetchFriendSearch } from "@/api/FriendFetchAPI";
+import { fetchFriendList } from "@/api/FriendFetchAPI";
 import FriendItem from "@/components/FriendItem";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -9,16 +9,20 @@ const index = () => {
     const { data: session } = useSession();
     const [keyword, setKeyword] = useState("");
     const [friends, setFriends] = useState<FriendItemProps[]>([]);
+    const [searchFriends, setSearchFriends] = useState<FriendItemProps[]>([]);
 
     const handleUserSearch = async () => {
-        const res = await fetchFriendSearch(keyword);
+        setSearchFriends(friends.filter((item) => item.nickname.includes(keyword)));
     };
 
     useEffect(() => {
         (async () => {
             const res = await fetchFriendList(Number(session?.user.id));
 
-            if (res.data.status === 200) setFriends(res.data.data);
+            if (res.data.status === 200) {
+                setFriends(res.data.data);
+                setSearchFriends(res.data.data);
+            }
         })();
     }, []);
 
@@ -41,7 +45,7 @@ const index = () => {
                 </div>
 
                 <ul className="mt-4 flex flex-wrap gap-3">
-                    {friends.map((item) => (
+                    {searchFriends.map((item) => (
                         <FriendItem key={item.id} info={item} />
                     ))}
                 </ul>

@@ -1,15 +1,22 @@
+import { PushRecentProps } from "@/@types/pushType";
+import { fetchRecentPushMessage } from "@/api/PushFetchAPI";
 import PushItem from "@/components/PushItem";
 import { requestPermission } from "@/utils/Notification";
 import { useSession } from "next-auth/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 const index = () => {
-    // const { data: session } = useSession();
-    // useEffect(() => {
-    //     if (session) {
-    //         requestPermission();
-    //     }
-    // }, []);
+    const { data: session } = useSession();
+    const [recentPushs, setRecentPushs] = useState<PushRecentProps[]>([]);
+
+    useEffect(() => {
+        (async () => {
+            const res = await fetchRecentPushMessage(Number(session?.user.id));
+            if (res.data.status === 200) {
+                setRecentPushs(res.data.data);
+            }
+        })();
+    }, []);
 
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
@@ -20,11 +27,9 @@ const index = () => {
             <div className="w-11/12 m-auto mt-6">
                 <h1 className=" text-2xl font-bold">최근 푸쉬 알림</h1>
                 <ul className="mt-4">
-                    {Array(6)
-                        .fill("")
-                        .map((_, idx) => (
-                            <PushItem key={idx} />
-                        ))}
+                    {recentPushs.map((item) => (
+                        <PushItem key={item.id} info={item} />
+                    ))}
                 </ul>
             </div>
         </main>

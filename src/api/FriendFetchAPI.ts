@@ -12,24 +12,24 @@ export const fetchGetFriend = async (id: number) => {
     return res;
 };
 
-// 친구 검색
-export const fetchFriendSearch = async (keyword: string) => {
+// 친구 목록
+export const fetchFriendList = async (id: number) => {
     const res = await axios({
-        url: "/api/friend/search",
         method: "get",
+        url: "/api/friend",
         params: {
-            keyword: keyword,
+            id: id,
         },
     });
 
     return res;
 };
 
-// 친구 목록
-export const fetchFriendList = async (id: number) => {
+// 초대 목록
+export const fetchInvitedList = async (id: number) => {
     const res = await axios({
         method: "get",
-        url: "/api/friend",
+        url: "/api/friend/invited",
         params: {
             id: id,
         },
@@ -47,19 +47,6 @@ export const fetchFriendInvited = async (data: FriendAddProps) => {
             "Content-Type": "application/json",
         },
         data: data,
-    });
-
-    return res;
-};
-
-// 초대 목록
-export const fetchInvitedList = async (id: number) => {
-    const res = await axios({
-        method: "get",
-        url: "/api/friend/invited",
-        params: {
-            id: id,
-        },
     });
 
     return res;

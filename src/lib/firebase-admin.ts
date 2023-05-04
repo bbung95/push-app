@@ -2,6 +2,8 @@ import admin from "firebase-admin";
 
 const { privateKey } = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_PRIVATE_KEY || "{privateKey : ''}");
 
+console.log(privateKey, process.env.NEXT_PUBLIC_FIREBASE_CLIENT_EMAIL);
+
 if (!admin.apps.length) {
     admin.initializeApp({
         credential: admin.credential.cert({

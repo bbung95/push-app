@@ -48,6 +48,7 @@ export const authOptions = {
         }),
     ],
     callbacks: {
+        // session 업데이트
         async jwt({ token, trigger, session, user, account, profile }: any) {
             if (trigger === "update") {
                 if (typeof session.nickname === "string") {
@@ -58,7 +59,6 @@ export const authOptions = {
                 }
 
                 if (typeof session.first_login === "boolean") {
-                    console.log("emfdjdhk");
                     token.user.first_login = false;
                 }
             }
@@ -74,16 +74,6 @@ export const authOptions = {
             }
             return Promise.resolve(session);
         },
-        // async signOut({ account, session, ...rest }: any) {
-        //     // 로그아웃 이후에 캐시된 인증 정보 삭제
-        //     await KakaoProvider();
-        //     await providers.Kakao.clearAccessToken();
-        //     await providers.Kakao.clearRefreshToken();
-
-        //     KakaoProvider.revokeAuthorization()
-
-        //     return Promise.resolve();
-        // },
     },
 };
 

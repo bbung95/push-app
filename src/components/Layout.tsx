@@ -8,10 +8,6 @@ const Layout = ({ children }: { children: JSX.Element }) => {
     const router = useRouter();
     const { pathname } = router;
 
-    useEffect(() => {
-        requestPermission();
-    }, []);
-
     const pahts = ["/home", "/friend", "/profile"];
 
     return (

@@ -1,5 +1,5 @@
 import { fetchUserTokenUpdate } from "@/api/UserFetchAPI";
-import { fcmToken } from "@/utils/Notification";
+import { fcmToken, requestPermission } from "@/utils/Notification";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -46,9 +46,12 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
     useEffect(() => {
         authRouter();
 
-        if (status === "authenticated") {
-            fetchUserTokenUpdate({ id: String(session.user.id), token: fcmToken.token });
-        }
+        (async () => {
+            if (status === "authenticated") {
+                const token = await requestPermission();
+                fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
+            }
+        })();
     }, [session]);
 
     if (status === "loading") {

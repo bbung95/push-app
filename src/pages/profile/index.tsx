@@ -37,7 +37,6 @@ const index = () => {
                             알림 설정
                         </button>
                         <p>{fcmToken.token}</p>
-
                         <div className="flex flex-col mt-4 gap-2">
                             <Link href="/profile/locker" className="btn btn-info text-white text-lg">
                                 보관함

@@ -1,8 +1,16 @@
-import Navigation from "@/components/Navigation";
 import PushItem from "@/components/PushItem";
-import React from "react";
+import { requestPermission } from "@/utils/Notification";
+import { useSession } from "next-auth/react";
+import React, { useEffect } from "react";
 
 const index = () => {
+    // const { data: session } = useSession();
+    // useEffect(() => {
+    //     if (session) {
+    //         requestPermission();
+    //     }
+    // }, []);
+
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
             <div className="bg-main-color h-96 relative rounded-b-3xl">

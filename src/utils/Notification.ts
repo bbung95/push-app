@@ -7,26 +7,30 @@ export const requestPermission = async () => {
     if (typeof window !== "undefined" && typeof window.navigator !== "undefined") {
         const messaging = getMessaging(app);
 
-        Notification.requestPermission().then(async (permission) => {
-            alert(permission);
+        const permission = await Notification.requestPermission();
+        alert(permission);
 
-            if (permission === "granted") {
-                const token = await getToken(messaging, { vapidKey: "BBsUF1frFhq8n107d6OnIKNbKbRWtwhzSyf96rqxbnyu_f0oixl7SW7rHdxnVt938zyKyyAR4KtSzyzxWWgQ3zY" });
+        if (permission === "granted") {
+            const token = await getToken(messaging, { vapidKey: "BBsUF1frFhq8n107d6OnIKNbKbRWtwhzSyf96rqxbnyu_f0oixl7SW7rHdxnVt938zyKyyAR4KtSzyzxWWgQ3zY" });
 
-                onMessage(messaging, (payload) => {
-                    console.log("Message received. ", payload);
+            // token 업데이트
 
-                    const notification = new Notification(payload.notification?.title ?? "", { body: payload.notification?.body });
-                    notification.onclick = () => (location.href = "/");
-                });
+            onMessage(messaging, (payload) => {
+                console.log("Message received. ", payload);
 
-                fcmToken.token = token;
-            } else if (permission === "denied") {
-                console.log("denied");
-                fcmToken.token = "";
-            }
-        });
+                const notification = new Notification(payload.notification?.title ?? "", { body: payload.notification?.body });
+                notification.onclick = () => (location.href = "/");
+            });
+
+            fcmToken.token = token;
+            return fcmToken.token;
+        } else if (permission === "denied") {
+            console.log("denied");
+            fcmToken.token = "";
+            return fcmToken.token;
+        }
     } else {
         fcmToken.token = "";
+        return fcmToken.token;
     }
 };

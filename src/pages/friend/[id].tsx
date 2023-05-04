@@ -31,7 +31,7 @@ const index = () => {
 
                 {friend && (
                     <>
-                        <div className="mt-4 h-40 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
+                        <div className="mt-4 h-36 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                             <div className="flex gap-3">
                                 <img className="w-28 h-28 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
                                 <div className="flex-1">
@@ -49,13 +49,13 @@ const index = () => {
                         </div>
 
                         <div className="mt-4 flex gap-2">
-                            <Link href={"/push/1"} className="btn btn-info flex-1">
+                            <Link href={`/push/${id}`} className="btn btn-info flex-1">
                                 <img src="/icon/message.svg" alt="" width={28} height={28} />
                             </Link>
 
-                            <Link href={"/friend/1"} className="btn btn-error w-24">
+                            <button className="btn btn-error w-24">
                                 <img src="/icon/trash.svg" alt="" width={28} height={28} />
-                            </Link>
+                            </button>
                         </div>
 
                         <div className="mt-4">

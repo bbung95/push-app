@@ -1,15 +1,24 @@
-import Navigation from "@/components/Navigation";
-import PushMessage from "@/components/PushMessage";
+import { FriendDetailProps } from "@/@types/friendType";
+import { fetchGetFriend } from "@/api/FriendFetchAPI";
+import { fetchPushMessage } from "@/api/PushFetchAPI";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React, { ChangeEvent, useState } from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 
 interface PushProp {
-    title?: string;
-    body?: string;
+    title: string;
+    message: string;
 }
 
+const initialize = { title: "", message: "" };
+
 const Push = () => {
-    const [push, setPush] = useState<PushProp>({});
+    const router = useRouter();
+    const { id } = router.query;
+    const { data: session } = useSession();
+    const [friend, setFriend] = useState<FriendDetailProps>();
+    const [push, setPush] = useState<PushProp>(initialize);
 
     const handleOnChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = e.target.value;
@@ -17,9 +26,37 @@ const Push = () => {
         if (value.length > 40) {
             alert("40글자 이상 작성할 수 없습니다.");
         } else {
-            setPush({ ...push, body: value });
+            setPush({ ...push, message: value });
         }
     };
+
+    const handleSendPushMessage = async () => {
+        if (push.title.length < 5) {
+            alert("타이틀을 5글자 이상 입력해주세요.");
+            return;
+        }
+
+        if (push.message.length < 5) {
+            alert("메시지를 5글자 이상 입력해주세요.");
+            return;
+        }
+
+        const res = await fetchPushMessage({ ...push, sender_id: Number(session?.user.id), receiver_id: Number(friend?.user_id) });
+
+        if (res.data.status === 201) {
+            alert("푸쉬메시지를 보냈습니다.");
+            setPush(initialize);
+        }
+    };
+
+    useEffect(() => {
+        (async () => {
+            const res = await fetchGetFriend(Number(id));
+            if (res.data.status === 200) {
+                setFriend(res.data.data);
+            }
+        })();
+    }, []);
 
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
@@ -30,30 +67,46 @@ const Push = () => {
                     </Link>
                     <h1 className=" text-3xl font-bold">푸쉬 작성</h1>
                 </div>
+                {friend && (
+                    <>
+                        <div className="mt-4 h-28 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
+                            <div className="flex gap-3">
+                                <img className="w-18 h-18 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
+                                <span className="text-xl flex-1 font-bold text-gray-700">{friend?.nickname}</span>
+                            </div>
+                        </div>
 
-                <div className="mt-4 h-28 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
-                    <div className="flex gap-3">
-                        <img className="w-18 h-18 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
-                        <span className="text-xl flex-1 font-bold text-gray-700">Alice Smith</span>
-                    </div>
-                </div>
+                        <div className="mt-4 relative">
+                            <input
+                                type="text"
+                                placeholder="title"
+                                className="input input-bordered w-full bg-gray-100"
+                                value={push.title || ""}
+                                onChange={(e) => setPush({ ...push, title: e.target.value })}
+                            />
 
-                <div className="mt-4 relative">
-                    <input type="text" placeholder="Title" className="input input-bordered w-full bg-gray-100" value={push.title || ""} onChange={(e) => setPush({ ...push, title: e.target.value })} />
+                            <textarea
+                                placeholder="message"
+                                className="mt-2 text-gray-700 textarea textarea-bordered textarea-lg w-full bg-gray-100"
+                                onChange={handleOnChangeText}
+                                value={push.message}
+                            ></textarea>
+                            <div className="absolute bottom-4 right-4 text-gray-500">
+                                <span>{push.message?.length ?? 0}</span>/40
+                            </div>
+                        </div>
 
-                    <textarea placeholder="Body" className="mt-2 text-gray-700 textarea textarea-bordered textarea-lg w-full bg-gray-100" onChange={handleOnChangeText} value={push.body}></textarea>
-                    <div className="absolute bottom-4 right-4 text-gray-500">
-                        <span>{push.body?.length ?? 0}</span>/40
-                    </div>
-                </div>
+                        <div className="mt-4 flex gap-2">
+                            <button className="text-white btn btn-info w-1/2" onClick={handleSendPushMessage}>
+                                보내기
+                            </button>
 
-                <div className="mt-4 flex gap-2">
-                    <button className="text-white btn btn-info w-1/2">보내기</button>
-
-                    <Link href={"/friend/1"} className="text-white btn btn-error w-1/2">
-                        취소
-                    </Link>
-                </div>
+                            <Link href={`/friend/${id}`} className="text-white btn btn-error w-1/2">
+                                취소
+                            </Link>
+                        </div>
+                    </>
+                )}
             </div>
         </main>
     );

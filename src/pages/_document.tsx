@@ -12,7 +12,7 @@ export default function Document() {
                 <link rel="manifest" href="/manifest.json" />
                 <link rel="apple-touch-icon" sizes="192x192" href="/image/icon-192x192.png" />
                 <link rel="apple-touch-icon" sizes="512x512" href="/image/icon-512x512.png" />
-                <meta name="theme-color" content="#317EFB" />
+                <meta name="theme-color" content="#1689D8" />
             </Head>
             <body>
                 <Main />

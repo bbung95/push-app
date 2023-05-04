@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { collection, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import nextConnect from "next-connect";
-import { getSession } from "next-auth/react";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 

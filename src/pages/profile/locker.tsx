@@ -14,11 +14,11 @@ const locker = () => {
                 </div>
 
                 <div className="flex flex-col mt-4 gap-2">
-                    {Array(11)
+                    {/* {Array(11)
                         .fill("")
                         .map((_, idx) => (
                             <PushItem key={idx} />
-                        ))}
+                        ))} */}
                 </div>
             </div>
         </main>

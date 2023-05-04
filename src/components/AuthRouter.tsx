@@ -49,7 +49,9 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
         (async () => {
             if (status === "authenticated") {
                 const token = await requestPermission();
-                fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
+                if (token) {
+                    fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
+                }
             }
         })();
     }, [session]);

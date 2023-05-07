@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { DocumentData, collection, doc, getDoc, getDocs, or, orderBy, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import nextConnect from "next-connect";
 import fcmAdmin from "@/lib/firebase-admin";
 import { db } from "@/lib/firebase-init";
@@ -8,6 +8,34 @@ import { PushProps } from "@/@types/model";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
+// 친구 message 내역
+handler.get(async (req, res) => {
+    const user_id = req.query.user_id;
+    const target_id = req.query.target_id;
+
+    const qeury = query(
+        collection(db, "push"),
+        where("receiver_id", "in", [Number(user_id), Number(target_id)]),
+        where("sender_id", "in", [Number(user_id), Number(target_id)]),
+        orderBy("created_date", "desc")
+    );
+    const findPushs = await getDocs(qeury);
+
+    const data: DocumentData[] = [];
+    findPushs.forEach((doc) => {
+        data.push({
+            id: doc.data().id,
+            sender_id: doc.data().sender_id,
+            title: doc.data().title,
+            message: doc.data().message,
+            created_date: doc.data().created_date.toDate(),
+        });
+    });
+
+    return res.json({ status: 200, data: data });
+});
+
+// message 보내기
 handler.post(async (req, res) => {
     const body = req.body;
 

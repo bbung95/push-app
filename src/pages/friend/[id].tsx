@@ -1,12 +1,15 @@
 import { FriendDetailProps } from "@/@types/friendType";
 import { fetchGetFriend } from "@/api/FriendFetchAPI";
+import { fetchFriendPushMessage } from "@/api/PushFetchAPI";
 import PushMessage from "@/components/PushMessage";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 const index = () => {
     const router = useRouter();
+    const { data: session } = useSession();
     const { id } = router.query;
     const [friend, setFriend] = useState<FriendDetailProps>();
 
@@ -15,6 +18,9 @@ const index = () => {
             const res = await fetchGetFriend(Number(id));
             if (res.data.status === 200) {
                 setFriend(res.data.data);
+
+                const resd = await fetchFriendPushMessage(Number(session?.user.id), res.data.data.user_id);
+                console.log(resd.data.data);
             }
         })();
     }, []);

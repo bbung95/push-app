@@ -15,5 +15,5 @@ export interface PushRecentProps {
     profile_img: string;
     title: string;
     message: string;
-    created_date: FieldValue;
+    created_date: Date;
 }

@@ -10,8 +10,6 @@ const InviteItem = ({ info, handle }: { info: InvitedItemProps; handle: Function
     const handleAcceptInvited = async () => {
         const res = await fetchAcceptInvited({ id: id, user_id: Number(session?.user.id), target_id: target_id });
 
-        console.log(res);
-
         if (res.data.status === 201) {
             handle(id);
         } else {

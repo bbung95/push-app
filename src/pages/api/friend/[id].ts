@@ -1,11 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import nextConnect from "next-connect";
 import { FriendDetailProps } from "@/@types/friendType";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
+// 친구 정보 가져오기
 handler.get(async (req, res) => {
     const id = req.query.id;
 
@@ -22,6 +23,15 @@ handler.get(async (req, res) => {
     };
 
     return res.json({ status: 200, data: data });
+});
+
+handler.put(async (req, res) => {
+    const id = req.query.id;
+    const body = req.body;
+
+    await updateDoc(doc(db, "friend", String(id)), { like: !body.like });
+
+    return res.json({ status: 201 });
 });
 
 export default handler;

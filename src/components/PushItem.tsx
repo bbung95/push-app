@@ -1,10 +1,9 @@
 import { PushRecentProps } from "@/@types/pushType";
+import { formatDate } from "@/utils/DateUtile";
 import Link from "next/link";
 import React from "react";
 
 const PushItem = ({ info }: { info: PushRecentProps }) => {
-    console.log(info);
-
     const { id, sender_id, friend_id, nickname, profile_img, title, message, created_date } = info;
 
     return (
@@ -17,7 +16,7 @@ const PushItem = ({ info }: { info: PushRecentProps }) => {
                 </div>
                 <div className="flex flex-col w-32 items-end">
                     <span className="text-gray-700 truncate">{nickname}</span>
-                    <span className="text-gray-400">4:20 PM</span>
+                    <span className="text-gray-400">{formatDate(created_date)}</span>
                 </div>
             </li>
         </Link>

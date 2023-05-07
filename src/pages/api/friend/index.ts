@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { DocumentData, collection, doc, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, orderBy, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import nextConnect from "next-connect";
 import { FriendItemProps } from "@/@types/friendType";
@@ -9,7 +9,7 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>();
 handler.get(async (req, res) => {
     const id = req.query.id;
 
-    const q = query(collection(db, "friend"), where("user_id", "==", Number(id)), where("accept", "==", true));
+    const q = query(collection(db, "friend"), where("user_id", "==", Number(id)), where("accept", "==", true), orderBy("like", "desc"));
     const findFriends = await getDocs(q);
     const data: any = [];
 

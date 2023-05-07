@@ -25,6 +25,22 @@ export const fetchFriendList = async (id: number) => {
     return res;
 };
 
+// 즐겨찾기 변경
+export const fetchChangeLike = async (id: number, like: boolean) => {
+    const res = await axios({
+        method: "put",
+        url: `/api/friend/${id}`,
+        headers: {
+            "Content-Type": "application/json",
+        },
+        data: {
+            like: like,
+        },
+    });
+
+    return res;
+};
+
 // 초대 목록
 export const fetchInvitedList = async (id: number) => {
     const res = await axios({

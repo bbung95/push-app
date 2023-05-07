@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { DocumentData, collection, doc, getDoc, getDocs, limit, query, where } from "firebase/firestore";
+import { DocumentData, collection, doc, getDoc, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import nextConnect from "next-connect";
 
@@ -8,14 +8,18 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>();
 handler.get(async (req, res) => {
     const user_id = req.query.user_id;
 
-    console.log(user_id);
-
-    const qeury = query(collection(db, "push"), where("receiver_id", "==", Number(user_id)), limit(10));
+    const qeury = query(collection(db, "push"), where("receiver_id", "==", Number(user_id)), orderBy("created_date", "desc"), limit(10));
     const findPushs = await getDocs(qeury);
 
     const data: DocumentData[] = [];
     findPushs.forEach((doc) => {
-        data.push(doc.data());
+        data.push({
+            id: doc.data().id,
+            sender_id: doc.data().sender_id,
+            title: doc.data().title,
+            message: doc.data().message,
+            created_date: doc.data().created_date.toDate(),
+        });
     });
 
     const newData: DocumentData[] = [];
@@ -29,8 +33,6 @@ handler.get(async (req, res) => {
         findFriends.forEach((doc) => {
             friend.push(doc.data());
         });
-
-        console.log(findUser.data(), friend);
 
         newData.push({
             id: value.id,

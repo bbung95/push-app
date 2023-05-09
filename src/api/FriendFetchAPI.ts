@@ -25,6 +25,16 @@ export const fetchFriendList = async (id: number) => {
     return res;
 };
 
+// 친구 삭제
+export const fetchFriendRemove = async (id: number) => {
+    const res = await axios({
+        method: "delete",
+        url: `/api/friend/${id}`,
+    });
+
+    return res;
+};
+
 // 즐겨찾기 변경
 export const fetchChangeLike = async (id: number, like: boolean) => {
     const res = await axios({

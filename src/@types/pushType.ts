@@ -17,3 +17,11 @@ export interface PushRecentProps {
     message: string;
     created_date: Date;
 }
+
+export interface FriendMessageProps {
+    id: number;
+    sender_id: number;
+    title: string;
+    message: string;
+    created_date: Date;
+}

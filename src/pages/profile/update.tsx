@@ -70,7 +70,7 @@ const index = () => {
                             <div className="flex flex-col gap-3">
                                 <div className="flex flex-col items-center m-auto">
                                     <img className="w-28 h-28 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
-                                    <button className="btn btn-info">프로필 사진 수정</button>
+                                    <button className="btn btn-info mt-2 text-white">프로필 사진 수정</button>
                                 </div>
                                 <div className="flex gap-4">
                                     <label htmlFor="nickname" className="font-bold text-md">

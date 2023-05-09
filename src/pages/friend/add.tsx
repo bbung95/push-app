@@ -11,7 +11,7 @@ const index = () => {
     const { data: session } = useSession();
 
     const handleUserSearch = async () => {
-        const res = await fetchUserSearch(keyword);
+        const res = await fetchUserSearch(Number(session?.user.id), keyword);
 
         if (res.data.data[0]?.id !== session?.user.id) {
             setSearchUser(res.data.data);
@@ -54,9 +54,13 @@ const index = () => {
                             </div>
                         </div>
 
-                        <button onClick={handleFriendAdd} className="btn btn-info absolute w-[calc(100%_-_2rem)] bottom-4 text-md text-white">
-                            추가
-                        </button>
+                        {searchUser[0].isFriend ? (
+                            <button className="btn btn-warning absolute w-[calc(100%_-_2rem)] bottom-4 text-md text-white">친구입니다.</button>
+                        ) : (
+                            <button onClick={handleFriendAdd} className="btn btn-info absolute w-[calc(100%_-_2rem)] bottom-4 text-md text-white">
+                                추가
+                            </button>
+                        )}
                     </div>
                 ) : (
                     <div className="absolute top-1/2 left-1/2 w-fit -translate-x-1/2 -translate-y-1/2 text-gray-600">검색결과가 없습니다.</div>

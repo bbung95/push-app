@@ -42,4 +42,5 @@ export interface UserSearchProps {
     nickname: string;
     state_message: string;
     profile_img: string;
+    isFriend: boolean;
 }

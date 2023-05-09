@@ -5,6 +5,7 @@ import fcmAdmin from "@/lib/firebase-admin";
 import { db } from "@/lib/firebase-init";
 import { getIndex } from "@/utils/DBUtill";
 import { PushProps } from "@/@types/model";
+import { FriendMessageProps } from "@/@types/pushType";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
@@ -21,7 +22,7 @@ handler.get(async (req, res) => {
     );
     const findPushs = await getDocs(qeury);
 
-    const data: DocumentData[] = [];
+    const data: FriendMessageProps[] = [];
     findPushs.forEach((doc) => {
         data.push({
             id: doc.data().id,

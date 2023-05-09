@@ -83,12 +83,13 @@ export const fetchUserProfileUpdate = async (data: UserUpdateProps) => {
 };
 
 // 유저 검색
-export const fetchUserSearch = async (keyword: string) => {
+export const fetchUserSearch = async (id: number, keyword: string) => {
     const res = await axios({
         url: "/api/user/search",
         method: "get",
         params: {
             keyword: keyword,
+            user_id: id,
         },
     });
 

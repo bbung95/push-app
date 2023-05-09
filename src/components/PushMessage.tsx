@@ -1,23 +1,30 @@
+import { FriendMessageProps } from "@/@types/pushType";
+import { formatDate } from "@/utils/DateUtile";
+import { useSession } from "next-auth/react";
 import React from "react";
 
-const PushMessage = ({ id }: { id: number }) => {
+const PushMessage = ({ info }: { info: FriendMessageProps }) => {
+    const { data: session } = useSession();
+
+    const { id, title, message, created_date, sender_id } = info;
+
     return (
         <div>
-            {id % 2 === 0 ? (
+            {session?.user.id !== sender_id ? (
                 <div className="chat chat-start">
                     <div className="chat-header">
-                        8시 알림문자 화이팅!
-                        <time className="text-xs opacity-50"> 2 hours ago</time>
+                        <span className=" font-bold text-md">{title}</span>
+                        <time className="text-xs opacity-50"> {formatDate(created_date)}</time>
                     </div>
-                    <div className="chat-bubble bg-gray-300 text-gray-700">🔥오늘도 화이팅!🔥오늘도 화이팅!🔥오늘도 화이팅!🔥오늘도 화이팅!~</div>
+                    <div className="chat-bubble bg-gray-300 text-gray-700">{message}</div>
                 </div>
             ) : (
                 <div className="chat chat-end">
                     <div className="chat-header">
-                        Anakin
-                        <time className="text-xs opacity-50"> 12:46</time>
+                        <span className=" font-bold text-md">{title}</span>
+                        <time className="text-xs opacity-50"> {formatDate(created_date)}</time>
                     </div>
-                    <div className="chat-bubble">I hate you!</div>
+                    <div className="chat-bubble">{message}</div>
                 </div>
             )}
         </div>

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, limit, query, updateDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import nextConnect from "next-connect";
 import { FriendDetailProps } from "@/@types/friendType";
@@ -25,11 +25,30 @@ handler.get(async (req, res) => {
     return res.json({ status: 200, data: data });
 });
 
+// 친구 즐겨찾기
 handler.put(async (req, res) => {
     const id = req.query.id;
     const body = req.body;
 
     await updateDoc(doc(db, "friend", String(id)), { like: !body.like });
+
+    return res.json({ status: 201 });
+});
+
+// 친구 삭제
+handler.delete(async (req, res) => {
+    const id = req.query.id;
+
+    const findFriend = await getDoc(doc(db, "friend", String(id)));
+    const data = findFriend.data();
+    console.log("data", data);
+    const q = query(collection(db, "friend"), where("user_id", "==", Number(data?.target_id)), where("target_id", "==", Number(data?.user_id)), limit(1));
+    const findTarget = await getDocs(q);
+
+    findTarget.forEach(async (item) => {
+        await deleteDoc(doc(db, "friend", String(item.data().id)));
+        await deleteDoc(doc(db, "friend", String(id)));
+    });
 
     return res.json({ status: 201 });
 });

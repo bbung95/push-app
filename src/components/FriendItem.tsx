@@ -15,8 +15,6 @@ const FriendItem = ({ info }: { info: FriendItemProps }) => {
     const handleChangeLike = async (e: React.MouseEvent) => {
         e.stopPropagation();
 
-        console.log(friend);
-
         const res = await fetchChangeLike(friend.id, friend.like);
 
         if (res.data.status === 201) {

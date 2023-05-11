@@ -48,12 +48,14 @@ handler.post(async (req, res) => {
     return res.json({ status: 201 });
 });
 
+// 프로필 수정
 handler.put(async (req, res) => {
     const body = req.body;
 
     await updateDoc(doc(db, "user", String(body.id)), {
         nickname: body.nickname,
         state_message: body.state_message,
+        profile_img: body.profile_img,
     });
 
     return res.json({ status: 201 });

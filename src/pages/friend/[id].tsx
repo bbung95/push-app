@@ -15,9 +15,9 @@ const index = () => {
     const [friend, setFriend] = useState<FriendDetailProps>({
         id: 0,
         like: false,
-        profile_img: "",
         state_message: "",
         nickname: "",
+        profile_img: "",
         user_id: 0,
     });
     const [pushMessages, setPushMessages] = useState<FriendMessageProps[]>([]);
@@ -69,11 +69,13 @@ const index = () => {
                     <h1 className=" text-3xl font-bold">친구</h1>
                 </div>
 
-                {friend && (
+                {friend.id !== 0 && (
                     <>
                         <div className="mt-4 h-36 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                             <div className="flex gap-3">
-                                <img className="w-28 h-28 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
+                                <div className="w-28 h-28 overflow-hidden flex justify-center">
+                                    <img className="w-auto h-auto rounded-xl" src={friend.profile_img || "https://via.placeholder.com/80x80"} alt="" />
+                                </div>
                                 <div className="flex-1">
                                     <span className="text-2xl flex-1 font-bold text-gray-700">{friend?.nickname}</span>
                                     <p className="mt-4 line-clamp-2">{friend?.state_message}</p>

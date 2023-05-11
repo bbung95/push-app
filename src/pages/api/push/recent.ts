@@ -39,7 +39,7 @@ handler.get(async (req, res) => {
             sender_id: value.sender_id,
             friend_id: friend[0].id,
             nickname: findUser.data()?.nickname,
-            profile_img: findUser.data()?.profile_imge,
+            profile_img: findUser.data()?.profile_img,
             title: value.title,
             message: value.message,
             created_date: value.created_date,

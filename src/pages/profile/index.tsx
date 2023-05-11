@@ -22,8 +22,10 @@ const index = () => {
                     <>
                         <div className="relative mt-4 h-56 p-4 flex flex-col bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                             <div className="flex gap-3">
-                                <img className="w-28 h-28 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
-                                <div className="w-full">
+                                <div className="w-28 h-28 overflow-hidden flex justify-center">
+                                    <img className="w-auto h-auto rounded-xl" src={session.user.profile_img || "https://via.placeholder.com/80x80"} alt="" />
+                                </div>
+                                <div className="flex-1">
                                     <span className="text-2xl flex-1 font-bold text-gray-700">{session.user.nickname}</span>
                                     <p className="mt-4 line-clamp-2">{session.user.state_message}</p>
                                 </div>

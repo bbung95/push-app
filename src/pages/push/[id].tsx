@@ -62,7 +62,7 @@ const Push = () => {
         <main className="h-full bg-white w-full overflow-auto pb-28">
             <div className="w-11/12 m-auto pt-4">
                 <div className="flex gap-3 items-center">
-                    <Link href={"/friend/1"}>
+                    <Link href={`/friend/${id}`}>
                         <img src="/icon/arrow-back.svg" alt="" width={28} height={28} />
                     </Link>
                     <h1 className=" text-3xl font-bold">푸쉬 작성</h1>
@@ -71,7 +71,10 @@ const Push = () => {
                     <>
                         <div className="mt-4 h-28 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                             <div className="flex gap-3">
-                                <img className="w-18 h-18 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
+                                <div className="w-18 h-18 overflow-hidden flex justify-center">
+                                    <img className="w-auto h-auto rounded-xl" src={friend.profile_img || "https://via.placeholder.com/80x80"} alt="" />
+                                </div>
+
                                 <span className="text-xl flex-1 font-bold text-gray-700">{friend?.nickname}</span>
                             </div>
                         </div>

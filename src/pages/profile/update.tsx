@@ -1,24 +1,45 @@
-import React, { useEffect, useState } from "react";
-import { authState } from "@/recoil/atoms/authState";
-import { useRecoilState } from "recoil";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import axios from "axios";
 import { fetchNicknameCheck, fetchUserProfileUpdate } from "@/api/UserFetchAPI";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { UserProfileProps } from "@/@types/userType";
+import axios from "axios";
+import { headers } from "next/dist/client/components/headers";
+import { fetchUploadImageFile } from "@/api/UploadFetchAPI";
 
 const index = () => {
     const { data: session, status, update } = useSession();
     const router = useRouter();
-    const [userData, setUserData] = useState({
+    const fileRef = useRef<HTMLInputElement>(null);
+    const [userData, setUserData] = useState<UserProfileProps>({
         nickname: "",
         state_message: "",
+        profile_img: "",
     });
 
     const handleOnChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target;
 
         setUserData({ ...userData, [target.name]: target.value });
+    };
+
+    const imagePreview = (file: File) => {
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            var result = reader.result;
+            setUserData({ ...userData, profile_img: result });
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const handleOnChangeFileInput = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { files } = e.target;
+        const selectFiles = files as FileList;
+        if (selectFiles.length > 0) {
+            imagePreview(selectFiles[0]);
+        }
     };
 
     const handleUpdateUserProfile = async () => {
@@ -34,17 +55,31 @@ const index = () => {
             return;
         }
 
+        let fileUrl;
+        const { files } = fileRef.current ?? {};
+        const selectFiles = files as FileList;
+        if (selectFiles.length > 0) {
+            const imageRes = await fetchUploadImageFile(selectFiles[0]);
+            if (imageRes.status !== 200) {
+                alert("이미지 업로드시 문제가 발생했습니다.");
+                return;
+            }
+
+            fileUrl = imageRes.data.data.url;
+        }
+
         const res = await fetchUserProfileUpdate({
             id: String(session?.user.id),
             nickname: userData.nickname,
             state_message: userData.state_message,
+            profile_img: fileUrl ?? session?.user.profile_img,
         });
 
         if (res.data.status !== 201) return;
 
         alert("프로필이 수정되었습니다.");
         // session 업데이트
-        await update({ nickname: userData.nickname, state_message: userData.state_message });
+        await update({ nickname: userData.nickname, state_message: userData.state_message, profile_img: fileUrl });
         router.push("/profile");
     };
 
@@ -52,6 +87,7 @@ const index = () => {
         setUserData({
             nickname: session?.user.nickname ?? "",
             state_message: session?.user.state_message ?? "",
+            profile_img: session?.user.profile_img ?? "",
         });
     }, [status]);
 
@@ -69,8 +105,13 @@ const index = () => {
                         <div className="mt-4 p-4 flex flex-col bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                             <div className="flex flex-col gap-3">
                                 <div className="flex flex-col items-center m-auto">
-                                    <img className="w-28 h-28 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
-                                    <button className="btn btn-info mt-2 text-white">프로필 사진 수정</button>
+                                    <div className="w-28 h-28 overflow-hidden flex justify-center">
+                                        <img className="h-auto w-auto rounded-xl" src={String(userData.profile_img) || "https://via.placeholder.com/80x80"} alt="" />
+                                    </div>
+                                    <input id="profile-image" type="file" className="hidden" name="image" onChange={handleOnChangeFileInput} ref={fileRef} accept=".jpg, .png, .jpeg" />
+                                    <label htmlFor="profile-image" className="btn btn-info mt-2 text-white">
+                                        프로필 사진 수정
+                                    </label>
                                 </div>
                                 <div className="flex gap-4">
                                     <label htmlFor="nickname" className="font-bold text-md">

@@ -30,7 +30,9 @@ const InviteItem = ({ info, handle }: { info: InvitedItemProps; handle: Function
     return (
         <div className="mt-4 h-28 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
             <div className="flex gap-3">
-                <img className="w-18 h-18 rounded-xl" src="https://via.placeholder.com/80x80" alt="" />
+                <div className="w-18 h-18 overflow-hidden flex justify-center">
+                    <img className="w-auto h-auto rounded-xl" src={profile_img ?? "https://via.placeholder.com/80x80"} alt="" />
+                </div>
                 <span className="text-xl flex-1 font-bold text-gray-700">{nickname}</span>
                 <div className="flex gap-2 items-end">
                     <button className="btn btn-accent p-0 w-12" onClick={handleAcceptInvited}>

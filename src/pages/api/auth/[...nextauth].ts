@@ -54,8 +54,11 @@ export const authOptions = {
                 if (typeof session.nickname === "string") {
                     token.user.nickname = session.nickname || token.user.nickname;
                 }
-                if (typeof session.nickname === "string") {
+                if (typeof session.state_message === "string") {
                     token.user.state_message = session.state_message || token.user.state_message;
+                }
+                if (typeof session.profile_img === "string") {
+                    token.user.profile_img = session.profile_img || token.user.profile_img;
                 }
 
                 if (typeof session.first_login === "boolean") {

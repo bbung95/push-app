@@ -9,7 +9,9 @@ const PushItem = ({ info }: { info: PushRecentProps }) => {
     return (
         <Link href={`/friend/${friend_id}`}>
             <li className="flex items-center pl-2 pr-2 h-20 cursor-pointer">
-                <img className="w-16 h-16 rounded-xl" src="https://via.placeholder.com/100x100" alt="" />
+                <div className="w-16 h-16 overflow-hidden flex justify-center">
+                    <img className="w-auto h-auto rounded-xl" src={profile_img || "https://via.placeholder.com/80x80"} alt="" />
+                </div>
                 <div className="flex-1 p-2">
                     <span className="text-lg font-bold text-gray-700 line-clamp-1">{title}</span>
                     <p className="text-gray-500 line-clamp-1">{message}</p>

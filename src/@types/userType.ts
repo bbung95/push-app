@@ -31,16 +31,19 @@ export interface UserFormProps {
     passwordCheck?: string;
 }
 
-export interface UserUpdateProps {
-    id: string;
-    nickname: string;
-    state_message?: string;
-}
-
 export interface UserSearchProps {
     id: number;
     nickname: string;
     state_message: string;
     profile_img: string;
     isFriend: boolean;
+}
+export interface UserProfileProps {
+    nickname: string;
+    state_message?: string;
+    profile_img?: string | ArrayBuffer | null;
+}
+
+export interface UserUpdateProps extends UserProfileProps {
+    id: string;
 }

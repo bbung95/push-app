@@ -1,6 +1,7 @@
 import { UserSearchProps } from "@/@types/userType";
 import { fetchFriendInvited } from "@/api/FriendFetchAPI";
 import { fetchUserSearch } from "@/api/UserFetchAPI";
+import ProfileImage from "@/components/ProfileImage";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -49,9 +50,7 @@ const index = () => {
                 {searchUser.length > 0 ? (
                     <div className="relative mt-4 h-56 p-4 flex flex-col bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                         <div className="flex gap-3">
-                            <div className="w-28 h-28 overflow-hidden flex justify-center">
-                                <img className="w-auto h-auto rounded-xl" src={searchUser[0].profile_img || "https://via.placeholder.com/80x80"} alt="" />
-                            </div>
+                            <ProfileImage image={searchUser[0].profile_img} size={8} />
                             <div className="flex-1">
                                 <span className="text-2xl flex-1 font-bold text-gray-700">{searchUser[0]?.nickname}</span>
                                 <p className="mt-4 line-clamp-2">{searchUser[0].state_message}</p>

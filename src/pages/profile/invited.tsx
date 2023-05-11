@@ -35,7 +35,6 @@ const locker = () => {
                     {inviteds.map((item) => {
                         return <InviteItem key={item.id} info={item} handle={handleChangeInvited} />;
                     })}
-
                     {inviteds.length === 0 && <div className="absolute top-1/2 left-1/2 w-fit -translate-x-1/2 -translate-y-1/2 text-gray-600">초대목록이 없습니다.</div>}
                 </div>
             </div>

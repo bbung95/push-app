@@ -1,6 +1,7 @@
 import { FriendDetailProps } from "@/@types/friendType";
 import { fetchGetFriend } from "@/api/FriendFetchAPI";
 import { fetchPushMessage } from "@/api/PushFetchAPI";
+import ProfileImage from "@/components/ProfileImage";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -71,10 +72,7 @@ const Push = () => {
                     <>
                         <div className="mt-4 h-28 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                             <div className="flex gap-3">
-                                <div className="w-18 h-18 overflow-hidden flex justify-center">
-                                    <img className="w-auto h-auto rounded-xl" src={friend.profile_img || "https://via.placeholder.com/80x80"} alt="" />
-                                </div>
-
+                                <ProfileImage image={String(friend.profile_img)} size={5} />
                                 <span className="text-xl flex-1 font-bold text-gray-700">{friend?.nickname}</span>
                             </div>
                         </div>

@@ -2,6 +2,7 @@ import { PushRecentProps } from "@/@types/pushType";
 import { formatDate } from "@/utils/DateUtile";
 import Link from "next/link";
 import React from "react";
+import ProfileImage from "./ProfileImage";
 
 const PushItem = ({ info }: { info: PushRecentProps }) => {
     const { id, sender_id, friend_id, nickname, profile_img, title, message, created_date } = info;
@@ -9,9 +10,7 @@ const PushItem = ({ info }: { info: PushRecentProps }) => {
     return (
         <Link href={`/friend/${friend_id}`}>
             <li className="flex items-center pl-2 pr-2 h-20 cursor-pointer">
-                <div className="w-16 h-16 overflow-hidden flex justify-center">
-                    <img className="w-auto h-auto rounded-xl" src={profile_img || "https://via.placeholder.com/80x80"} alt="" />
-                </div>
+                <ProfileImage image={String(profile_img)} size={4} />
                 <div className="flex-1 p-2">
                     <span className="text-lg font-bold text-gray-700 line-clamp-1">{title}</span>
                     <p className="text-gray-500 line-clamp-1">{message}</p>

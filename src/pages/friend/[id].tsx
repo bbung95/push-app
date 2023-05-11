@@ -2,6 +2,7 @@ import { FriendDetailProps } from "@/@types/friendType";
 import { FriendMessageProps } from "@/@types/pushType";
 import { fetchChangeLike, fetchFriendRemove, fetchGetFriend } from "@/api/FriendFetchAPI";
 import { fetchFriendPushMessage } from "@/api/PushFetchAPI";
+import ProfileImage from "@/components/ProfileImage";
 import PushMessage from "@/components/PushMessage";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -73,9 +74,7 @@ const index = () => {
                     <>
                         <div className="mt-4 h-36 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                             <div className="flex gap-3">
-                                <div className="w-28 h-28 overflow-hidden flex justify-center">
-                                    <img className="w-auto h-auto rounded-xl" src={friend.profile_img || "https://via.placeholder.com/80x80"} alt="" />
-                                </div>
+                                <ProfileImage image={friend.profile_img} size={7} />
                                 <div className="flex-1">
                                     <span className="text-2xl flex-1 font-bold text-gray-700">{friend?.nickname}</span>
                                     <p className="mt-4 line-clamp-2">{friend?.state_message}</p>

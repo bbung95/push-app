@@ -7,9 +7,14 @@ import { UserProfileProps } from "@/@types/userType";
 import axios from "axios";
 import { headers } from "next/dist/client/components/headers";
 import { fetchUploadImageFile } from "@/api/UploadFetchAPI";
+import Spiner from "@/components/Spiner";
+import { useSetRecoilState } from "recoil";
+import { loadingState } from "@/recoil/atoms/loadingState";
+import ProfileImage from "@/components/ProfileImage";
 
 const index = () => {
     const { data: session, status, update } = useSession();
+    const setIsLoading = useSetRecoilState(loadingState);
     const router = useRouter();
     const fileRef = useRef<HTMLInputElement>(null);
     const [userData, setUserData] = useState<UserProfileProps>({
@@ -55,6 +60,9 @@ const index = () => {
             return;
         }
 
+        // 로딩 시작
+        setIsLoading(true);
+
         let fileUrl;
         const { files } = fileRef.current ?? {};
         const selectFiles = files as FileList;
@@ -75,6 +83,7 @@ const index = () => {
             profile_img: fileUrl ?? session?.user.profile_img,
         });
 
+        setIsLoading(false);
         if (res.data.status !== 201) return;
 
         alert("프로필이 수정되었습니다.");
@@ -105,9 +114,8 @@ const index = () => {
                         <div className="mt-4 p-4 flex flex-col bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
                             <div className="flex flex-col gap-3">
                                 <div className="flex flex-col items-center m-auto">
-                                    <div className="w-28 h-28 overflow-hidden flex justify-center">
-                                        <img className="h-auto w-auto rounded-xl" src={String(userData.profile_img) || "https://via.placeholder.com/80x80"} alt="" />
-                                    </div>
+                                    <ProfileImage image={String(userData.profile_img)} size={8} />
+
                                     <input id="profile-image" type="file" className="hidden" name="image" onChange={handleOnChangeFileInput} ref={fileRef} accept=".jpg, .png, .jpeg" />
                                     <label htmlFor="profile-image" className="btn btn-info mt-2 text-white">
                                         프로필 사진 수정

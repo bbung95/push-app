@@ -35,9 +35,9 @@ const index = () => {
                             </Link>
                         </div>
                         <div className="flex flex-col mt-4 gap-2">
-                            <Link href="/profile/locker" className="btn btn-info text-white text-lg">
+                            {/* <Link href="/profile/locker" className="btn btn-info text-white text-lg">
                                 보관함
-                            </Link>
+                            </Link> */}
                             <Link href="/profile/invited" className="btn btn-info text-white text-lg">
                                 초대목록
                             </Link>

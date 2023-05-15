@@ -27,8 +27,8 @@ const index = () => {
     }, []);
 
     return (
-        <main className=" h-full bg-white w-full overflow-auto pb-28">
-            <div className="w-11/12 m-auto pt-4">
+        <main className=" h-full bg-white w-full overflow-hidden pb-28">
+            <div className="w-11/12 m-auto pt-4 h-full">
                 <div>
                     <div className="flex items-center">
                         <h1 className=" text-3xl font-bold">친구 목록</h1>
@@ -44,7 +44,7 @@ const index = () => {
                     </div>
                 </div>
 
-                <ul className="mt-4 flex flex-wrap gap-3">
+                <ul className="mt-4 flex flex-wrap gap-3 overflow-auto h-full pb-28">
                     {searchFriends.map((item) => (
                         <FriendItem key={item.id} info={item} />
                     ))}

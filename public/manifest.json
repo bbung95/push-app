@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
-    "name": "push-app",
-    "short_name": "push",
+    "name": "TABTAB",
+    "short_name": "TAB",
     "icons": [
         {
             "src": "/image/icon-192x192.png",

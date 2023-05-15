@@ -29,7 +29,7 @@ const InviteItem = ({ info, handle }: { info: InvitedItemProps; handle: Function
     };
 
     return (
-        <div className="mt-4 h-28 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
+        <div className="mr-4 ml-4 h-28 p-4 bg-white rounded-3xl drop-shadow-[1px_1px_6px_rgba(128,128,128,0.25)]">
             <div className="flex gap-3">
                 <ProfileImage image={profile_img} size={5} />
                 <span className="text-xl flex-1 font-bold text-gray-700">{nickname}</span>

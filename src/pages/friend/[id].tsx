@@ -61,13 +61,13 @@ const index = () => {
     }, []);
 
     return (
-        <main className="h-full bg-white w-full overflow-auto pb-28">
-            <div className="w-11/12 m-auto pt-4">
+        <main className="h-full bg-white w-full overflow-hidden">
+            <div className="w-11/12 m-auto pt-4 h-full">
                 <div className="flex gap-3 items-center">
                     <Link href={"/friend"}>
                         <img src="/icon/arrow-back.svg" alt="" width={28} height={28} />
                     </Link>
-                    <h1 className=" text-3xl font-bold">친구</h1>
+                    <h1 className="text-3xl font-bold">친구</h1>
                 </div>
 
                 {friend.id !== 0 && (
@@ -99,7 +99,7 @@ const index = () => {
                             </button>
                         </div>
 
-                        <div className="mt-4">
+                        <div className="mt-4 overflow-auto h-full pb-80">
                             {pushMessages.map((item) => (
                                 <PushMessage key={item.id} info={item} />
                             ))}

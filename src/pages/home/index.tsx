@@ -21,7 +21,7 @@ const index = () => {
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">
             <div className="bg-main-color h-96 relative rounded-b-3xl">
-                <img className="absolute bottom-10 left-1/2 -translate-x-1/2" src="/image/main.png" alt="" width={300} height={150} />
+                <img className="absolute bottom-10 left-1/2 -translate-x-1/2" src="/image/white-logo.png" alt="" width={300} height={150} />
             </div>
 
             <div className="w-11/12 m-auto mt-6">

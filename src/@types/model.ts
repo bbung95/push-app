@@ -33,3 +33,10 @@ export interface PushProps {
     message: string;
     created_date: FieldValue;
 }
+
+export interface LockerProps {
+    id: number;
+    user_id: number;
+    push_id: number;
+    created_date: FieldValue;
+}

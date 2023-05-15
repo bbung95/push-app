@@ -16,7 +16,7 @@ const index = () => {
                 setRecentPushs(res.data.data);
             }
         })();
-    }, []);
+    }, [session]);
 
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">

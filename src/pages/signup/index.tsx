@@ -45,7 +45,7 @@ const index = () => {
 
     return (
         <div className="h-full bg-main-color flex flex-col-reverse">
-            <div className="pb-12 pt-5 bg-white rounded-t-3xl drop-shadow-[0_1px_3px_rgba(25,40,47,0.5)]">
+            <div className="pb-5 pt-5 bg-white rounded-t-3xl drop-shadow-[0_1px_3px_rgba(25,40,47,0.5)]">
                 <UserInputBox title="회원가입" handle={handleOnClickSignup} type="signup" />
             </div>
             <div className="flex-1 w-11/12 m-auto pt-4 ">
@@ -54,6 +54,7 @@ const index = () => {
                         <img src="/icon/arrow-back-white.svg" alt="" width={28} height={28} />
                     </Link>
                 </div>
+                <img src="/image/white-logo.png" alt="" className="w-40 m-auto pt-3" />
             </div>
         </div>
     );

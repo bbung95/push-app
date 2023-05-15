@@ -8,14 +8,16 @@ export default function index() {
 
     return (
         <div className="h-full bg-main-color">
-            <div className="flex flex-col gap-4 w-9/12 m-auto pt-96">
-                <Link href={"/login"} className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md">
+            <div className="flex flex-col gap-4 w-9/12 m-auto items-center">
+                <img src="/image/white-logo.png" alt="" className="w-40 pt-32 pb-10" />
+
+                <Link href={"/login"} className="btn bg-white w-full border-0 text-gray-600 hover:bg-white drop-shadow-md">
                     로그인
                 </Link>
-                <Link href={"/signup"} className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md">
+                <Link href={"/signup"} className="btn bg-white w-full border-0 text-gray-600 hover:bg-white drop-shadow-md">
                     회원가입
                 </Link>
-                <button className="btn btn-warning text-gray-600 drop-shadow-md" onClick={() => handleOAuthLogin("kakao")}>
+                <button className="btn btn-warning text-gray-600 w-full drop-shadow-md" onClick={() => handleOAuthLogin("kakao")}>
                     kakao
                 </button>
                 {/* <button className="btn bg-white border-0 text-gray-600 hover:bg-white drop-shadow-md" onClick={handlerGoogleLogin}>

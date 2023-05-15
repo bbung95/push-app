@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Navigation from "./Navigation";
 import { useRouter } from "next/router";
 import AuthRouter from "./AuthRouter";
-import { requestPermission } from "@/utils/Notification";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import { loadingState } from "@/recoil/atoms/loadingState";
 import Spiner from "./Spiner";
 

@@ -2,8 +2,7 @@ import { fetchUserTokenUpdate } from "@/api/UserFetchAPI";
 import { fcmToken, requestPermission } from "@/utils/Notification";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import Spiner from "./Spiner";
+import React, { useEffect, useState } from "react";
 
 const AuthRouter = ({ children }: { children: JSX.Element }) => {
     const router = useRouter();
@@ -60,7 +59,7 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
     if (status === "loading") {
         return (
             <div className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute">
-                <Spiner />
+                <img src="/image/icon-192x192.png" alt="" />
             </div>
         );
     } else {

@@ -8,11 +8,12 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const index = () => {
     const router = useRouter();
-    const { data: session } = useSession();
     const { id } = router.query;
+    const { data: session } = useSession();
     const [friend, setFriend] = useState<FriendDetailProps>({
         id: 0,
         like: false,

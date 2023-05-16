@@ -4,27 +4,28 @@ import FriendItem from "@/components/FriendItem";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const index = () => {
     const { data: session } = useSession();
     const [keyword, setKeyword] = useState("");
     const [friends, setFriends] = useState<FriendItemProps[]>([]);
     const [searchFriends, setSearchFriends] = useState<FriendItemProps[]>([]);
+    const { data, isLoading } = useQuery(["friendListKey", session?.user.id], () => fetchFriendList(Number(session?.user.id)), {
+        staleTime: 1000 * 30 * 1,
+        cacheTime: 1000 * 60 * 5,
+    });
 
     const handleUserSearch = async () => {
         setSearchFriends(friends.filter((item) => item.nickname.includes(keyword)));
     };
 
     useEffect(() => {
-        (async () => {
-            const res = await fetchFriendList(Number(session?.user.id));
-
-            if (res.data.status === 200) {
-                setFriends(res.data.data);
-                setSearchFriends(res.data.data);
-            }
-        })();
-    }, []);
+        if (!isLoading) {
+            setFriends(data?.data.data);
+            setSearchFriends(data?.data.data);
+        }
+    }, [isLoading]);
 
     return (
         <main className=" h-full bg-white w-full overflow-hidden pb-28">

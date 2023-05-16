@@ -1,22 +1,22 @@
 import { PushRecentProps } from "@/@types/pushType";
 import { fetchRecentPushMessage } from "@/api/PushFetchAPI";
 import PushItem from "@/components/PushItem";
-import { requestPermission } from "@/utils/Notification";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 
 const index = () => {
     const { data: session } = useSession();
     const [recentPushs, setRecentPushs] = useState<PushRecentProps[]>([]);
 
+    const { data, isLoading } = useQuery(["recentMessages", session?.user.id], () => fetchRecentPushMessage(Number(session?.user.id)), {
+        staleTime: 1000 * 30 * 1,
+    });
+
     useEffect(() => {
-        (async () => {
-            const res = await fetchRecentPushMessage(Number(session?.user.id));
-            if (res.data.status === 200) {
-                setRecentPushs(res.data.data);
-            }
-        })();
-    }, [session]);
+        if (!isLoading) setRecentPushs(data?.data.data);
+    }, [isLoading]);
 
     return (
         <main className="h-full bg-white w-full overflow-auto pb-28">

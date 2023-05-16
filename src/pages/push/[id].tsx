@@ -2,10 +2,12 @@ import { FriendDetailProps } from "@/@types/friendType";
 import { fetchGetFriend } from "@/api/FriendFetchAPI";
 import { fetchPushMessage } from "@/api/PushFetchAPI";
 import ProfileImage from "@/components/ProfileImage";
+import { loadingState } from "@/recoil/atoms/loadingState";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { useSetRecoilState } from "recoil";
 
 interface PushProp {
     title: string;
@@ -20,6 +22,7 @@ const Push = () => {
     const { data: session } = useSession();
     const [friend, setFriend] = useState<FriendDetailProps>();
     const [push, setPush] = useState<PushProp>(initialize);
+    const setIsLoading = useSetRecoilState(loadingState);
 
     const handleOnChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = e.target.value;
@@ -42,12 +45,15 @@ const Push = () => {
             return;
         }
 
+        setIsLoading(true);
+
         const res = await fetchPushMessage({ ...push, sender_id: Number(session?.user.id), receiver_id: Number(friend?.user_id) });
 
         if (res.data.status === 201) {
             alert("푸쉬메시지를 보냈습니다.");
             setPush(initialize);
         }
+        setIsLoading(false);
     };
 
     useEffect(() => {

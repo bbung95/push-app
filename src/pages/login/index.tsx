@@ -24,22 +24,27 @@ const index = () => {
         }
 
         setIsLoading(true);
-        await signIn("credentials", { username: email, password: password, redirect: false });
+        const res = await signIn("credentials", { username: email, password: password, redirect: false });
+
+        if (!res?.ok) {
+            const errorMessage = UserAuthErrorCodes["sign-in-fail"];
+            alert(errorMessage);
+        }
         setIsLoading(false);
     };
 
     return (
-        <div className="h-full bg-main-color flex flex-col-reverse items-center">
-            <div className="pb-12 pt-5 bg-white w-full rounded-t-3xl drop-shadow-[0_1px_3px_rgba(25,40,47,0.5)]">
-                <UserInputBox title="로그인" handle={handleOnClickLogin} />
-            </div>
+        <div className="relative h-full bg-main-color flex flex-col items-center">
             <div className="flex-1 w-11/12 m-auto pt-4">
                 <div className="flex gap-3 flex-1 items-center">
                     <Link href={"/"}>
                         <img src="/icon/arrow-back-white.svg" alt="" width={28} height={28} />
                     </Link>
                 </div>
-                <img src="/image/white-logo.png" alt="" className="w-40 m-auto pt-3" />
+            </div>
+            <div className="absolute pb-8 pt-5 top-1/2 -translate-y-1/2 bg-white w-full rounded-3xl drop-shadow-[0_1px_3px_rgba(25,40,47,0.5)]">
+                <img src="/image/white-image.png" alt="" className="w-32 m-auto pt-3" />
+                <UserInputBox title="로그인" handle={handleOnClickLogin} />
             </div>
         </div>
     );

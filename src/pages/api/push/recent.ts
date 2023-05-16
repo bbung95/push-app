@@ -8,7 +8,7 @@ const handler = nextConnect<NextApiRequest, NextApiResponse>();
 handler.get(async (req, res) => {
     const user_id = req.query.user_id;
 
-    const qeury = query(collection(db, "push"), where("receiver_id", "==", Number(user_id)), orderBy("created_date", "desc"), limit(10));
+    const qeury = query(collection(db, "push"), where("receiver_id", "==", Number(user_id)), orderBy("created_date", "desc"), limit(6));
     const findPushs = await getDocs(qeury);
 
     const data: DocumentData[] = [];

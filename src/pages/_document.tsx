@@ -7,7 +7,7 @@ export default function Document() {
                 <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
                 <meta name="description" content="Description" />
                 <meta name="keywords" content="Keywords" />
-                <title>push-app</title>
+                <title>TABTAB</title>
 
                 <link rel="manifest" href="/manifest.json" />
                 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png" />

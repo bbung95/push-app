@@ -1,16 +1,20 @@
 import { FriendItemProps } from "@/@types/friendType";
 import { fetchFriendList } from "@/api/FriendFetchAPI";
 import FriendItem from "@/components/FriendItem";
+import { loadingState } from "@/recoil/atoms/loadingState";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { useSetRecoilState } from "recoil";
 
 const index = () => {
     const { data: session } = useSession();
     const [keyword, setKeyword] = useState("");
     const [friends, setFriends] = useState<FriendItemProps[]>([]);
     const [searchFriends, setSearchFriends] = useState<FriendItemProps[]>([]);
+    const setIsLoading = useSetRecoilState(loadingState);
+
     const { data, isLoading } = useQuery(["friendListKey", session?.user.id], () => fetchFriendList(Number(session?.user.id)), {
         staleTime: 1000 * 30 * 1,
         cacheTime: 1000 * 60 * 5,
@@ -25,12 +29,13 @@ const index = () => {
             setFriends(data?.data.data);
             setSearchFriends(data?.data.data);
         }
+        setIsLoading(isLoading);
     }, [isLoading]);
 
     return (
         <main className=" h-full bg-white w-full overflow-hidden pb-28">
             <div className="w-11/12 m-auto pt-4 h-full">
-                <div>
+                <div style={{ height: 100 }}>
                     <div className="flex items-center">
                         <h1 className=" text-3xl font-bold">친구 목록</h1>
                         <Link href={"/friend/add"} className="ml-auto mr-4">
@@ -45,7 +50,7 @@ const index = () => {
                     </div>
                 </div>
 
-                <ul className="mt-4 flex flex-wrap gap-3 overflow-auto h-full pb-28">
+                <ul className="mt-4 flex flex-wrap gap-3 pb-12 overflow-auto" style={{ maxHeight: "calc(100% - 100px)" }}>
                     {searchFriends.map((item) => (
                         <FriendItem key={item.id} info={item} />
                     ))}

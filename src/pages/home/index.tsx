@@ -1,14 +1,17 @@
 import { PushRecentProps } from "@/@types/pushType";
 import { fetchRecentPushMessage } from "@/api/PushFetchAPI";
 import PushItem from "@/components/PushItem";
+import { loadingState } from "@/recoil/atoms/loadingState";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { useSetRecoilState } from "recoil";
 
 const index = () => {
     const { data: session } = useSession();
     const [recentPushs, setRecentPushs] = useState<PushRecentProps[]>([]);
+    const setIsLoading = useSetRecoilState(loadingState);
 
     const { data, isLoading } = useQuery(["recentMessages", session?.user.id], () => fetchRecentPushMessage(Number(session?.user.id)), {
         staleTime: 1000 * 30 * 1,
@@ -16,6 +19,7 @@ const index = () => {
 
     useEffect(() => {
         if (!isLoading) setRecentPushs(data?.data.data);
+        setIsLoading(isLoading);
     }, [isLoading]);
 
     return (

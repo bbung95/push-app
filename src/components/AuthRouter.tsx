@@ -1,8 +1,8 @@
 import { fetchUserTokenUpdate } from "@/api/UserFetchAPI";
-import { fcmToken, requestPermission } from "@/utils/Notification";
+import { requestPermission } from "@/utils/Notification";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 const AuthRouter = ({ children }: { children: JSX.Element }) => {
     const router = useRouter();

@@ -5,12 +5,15 @@ import { UserFormProps } from "@/@types/userType";
 import { UserAuthErrorCodes } from "@/@types/errors";
 import { fetchEmailCheck, fetchUserAdd } from "@/api/UserFetchAPI";
 import { useRouter } from "next/router";
+import { useSetRecoilState } from "recoil";
+import { loadingState } from "@/recoil/atoms/loadingState";
 
 const index = () => {
     const router = useRouter();
+    const setIsLoading = useSetRecoilState(loadingState);
 
     const handleOnClickSignup = async ({ email, password, passwordCheck }: UserFormProps) => {
-        if (email === "") {
+        if (email === "" || !email.includes("@")) {
             const errorMessage = UserAuthErrorCodes["invalid-email"];
             alert(errorMessage);
             return;
@@ -36,25 +39,26 @@ const index = () => {
             return;
         }
 
+        setIsLoading(true);
         const res = await fetchUserAdd({ email, password });
-        localStorage.setItem("jwt-token", res.data);
+        setIsLoading(false);
 
         alert("회원가입이 완료되었습니다.");
         router.push("/");
     };
 
     return (
-        <div className="h-full bg-main-color flex flex-col-reverse">
-            <div className="pb-5 pt-5 bg-white rounded-t-3xl drop-shadow-[0_1px_3px_rgba(25,40,47,0.5)]">
-                <UserInputBox title="회원가입" handle={handleOnClickSignup} type="signup" />
-            </div>
+        <div className="h-full bg-main-color flex flex-col">
             <div className="flex-1 w-11/12 m-auto pt-4 ">
                 <div className="flex gap-3 items-center">
                     <Link href={"/"}>
                         <img src="/icon/arrow-back-white.svg" alt="" width={28} height={28} />
                     </Link>
                 </div>
-                <img src="/image/white-logo.png" alt="" className="w-40 m-auto pt-3" />
+            </div>
+            <div className="absolute pb-8 top-1/2 -translate-y-1/2 bg-white w-full rounded-3xl drop-shadow-[0_1px_3px_rgba(25,40,47,0.5)]">
+                <img src="/image/white-image.png" alt="" className="w-32 m-auto pt-3" />
+                <UserInputBox title="회원가입" handle={handleOnClickSignup} type="signup" />
             </div>
         </div>
     );

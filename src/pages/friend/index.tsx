@@ -16,7 +16,6 @@ const index = () => {
     const setIsLoading = useSetRecoilState(loadingState);
 
     const { data, isLoading } = useQuery(["friendListKey", session?.user.id], () => fetchFriendList(Number(session?.user.id)), {
-        staleTime: 1000 * 30 * 1,
         cacheTime: 1000 * 60 * 5,
     });
 

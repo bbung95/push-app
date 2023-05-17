@@ -2,13 +2,16 @@ import { UserSearchProps } from "@/@types/userType";
 import { fetchFriendInvited } from "@/api/FriendFetchAPI";
 import { fetchUserSearch } from "@/api/UserFetchAPI";
 import ProfileImage from "@/components/ProfileImage";
+import { loadingState } from "@/recoil/atoms/loadingState";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
+import { useSetRecoilState } from "recoil";
 
 const index = () => {
     const [keyword, setKeyword] = useState("");
     const [searchUser, setSearchUser] = useState<UserSearchProps[]>([]);
+    const setIsLoading = useSetRecoilState(loadingState);
     const { data: session } = useSession();
 
     const handleUserSearch = async () => {
@@ -22,12 +25,12 @@ const index = () => {
     };
 
     const handleFriendAdd = async () => {
-        const res = await fetchFriendInvited({ id: Number(session?.user.id), target_id: searchUser[0].id });
-
+        setIsLoading(true);
+        const res = await fetchFriendInvited({ id: Number(session?.user.id), target_id: searchUser[0].id, nickname: String(session?.user.nickname) });
         if (res.data.status === 201) {
-            // 알림 발송
-            alert("친구를 초대했습니다.");
+            setSearchUser([{ ...searchUser[0], isFriend: true }]);
         }
+        setIsLoading(false);
     };
 
     return (

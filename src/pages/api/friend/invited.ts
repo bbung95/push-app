@@ -1,10 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { DocumentData, collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from "@/lib/firebase-init";
 import nextConnect from "next-connect";
 import { getIndex } from "@/utils/DBUtill";
 import { FriendProps } from "@/@types/model";
 import { InvitedItemProps } from "@/@types/inviteType";
+import { createMessage, sendPushMessage } from "@/utils/PushUtil";
+import { PushMessageTypes } from "@/@types/message";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
@@ -27,7 +29,7 @@ handler.get(async (req, res) => {
             id: value.id,
             nickname: findUser.data()?.nickname,
             profile_img: findUser.data()?.profile_img,
-            target_id: findUser.data()?.id,
+            user_id: findUser.data()?.id,
         });
     }
 
@@ -51,6 +53,15 @@ handler.post(async (req, res) => {
 
     await setDoc(doc(db, "friend", String(friend.id)), friend);
 
+    // 초대 메시지 보내기
+    const findUser = await getDoc(doc(db, "user", String(body.target_id)));
+    let deviceToken = findUser.data()?.token ?? "";
+    if (!deviceToken) {
+        return res.json({ status: 201 });
+    }
+    const message = createMessage(PushMessageTypes["invited-message"], `${body.nickname}님이 친구요청하셨습니다.`, deviceToken);
+    await sendPushMessage(message);
+
     return res.json({ status: 201 });
 });
 
@@ -70,6 +81,15 @@ handler.put(async (req, res) => {
         like: false,
     };
     await setDoc(doc(db, "friend", String(friend.id)), friend);
+
+    // 초대 메시지 보내기
+    const findUser = await getDoc(doc(db, "user", String(body.target_id)));
+    let deviceToken = findUser.data()?.token ?? "";
+    if (!deviceToken) {
+        return res.json({ status: 201 });
+    }
+    const message = createMessage(PushMessageTypes["accept-invited-message"], `${body.nickname}님이 친구가 되었습니다.`, deviceToken);
+    await sendPushMessage(message);
 
     return res.json({ status: 201 });
 });

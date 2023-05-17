@@ -2,7 +2,6 @@ import { PushRecentProps } from "@/@types/pushType";
 import { fetchRecentPushMessage } from "@/api/PushFetchAPI";
 import PushItem from "@/components/PushItem";
 import { loadingState } from "@/recoil/atoms/loadingState";
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";

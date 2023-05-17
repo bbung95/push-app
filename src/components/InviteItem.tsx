@@ -6,10 +6,10 @@ import ProfileImage from "./ProfileImage";
 
 const InviteItem = ({ info, handle }: { info: InvitedItemProps; handle: Function }) => {
     const { data: session } = useSession();
-    const { id, nickname, profile_img, target_id } = info;
+    const { id, nickname, profile_img, user_id } = info;
 
     const handleAcceptInvited = async () => {
-        const res = await fetchAcceptInvited({ id: id, user_id: Number(session?.user.id), target_id: target_id });
+        const res = await fetchAcceptInvited({ id: id, user_id: Number(session?.user.id), target_id: user_id, nickname: String(session?.user.nickname) });
 
         if (res.data.status === 201) {
             handle(id);

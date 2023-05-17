@@ -16,7 +16,6 @@ handler.get(async (req, res) => {
         data.push({
             id: doc.data().id,
             sender_id: doc.data().sender_id,
-            title: doc.data().title,
             message: doc.data().message,
             created_date: doc.data().created_date.toDate(),
         });
@@ -37,10 +36,9 @@ handler.get(async (req, res) => {
         newData.push({
             id: value.id,
             sender_id: value.sender_id,
-            friend_id: friend[0].id,
+            friend_id: friend[0]?.id ?? 0,
             nickname: findUser.data()?.nickname,
             profile_img: findUser.data()?.profile_img,
-            title: value.title,
             message: value.message,
             created_date: value.created_date,
         });

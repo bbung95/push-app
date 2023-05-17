@@ -9,19 +9,18 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 
-interface PushProp {
-    title: string;
+interface PushMessageProp {
     message: string;
 }
 
-const initialize = { title: "", message: "" };
+const initialize = { message: "" };
 
 const Push = () => {
     const router = useRouter();
     const { id } = router.query;
     const { data: session } = useSession();
     const [friend, setFriend] = useState<FriendDetailProps>();
-    const [push, setPush] = useState<PushProp>(initialize);
+    const [push, setPush] = useState<PushMessageProp>(initialize);
     const setIsLoading = useSetRecoilState(loadingState);
 
     const handleOnChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -35,18 +34,12 @@ const Push = () => {
     };
 
     const handleSendPushMessage = async () => {
-        if (push.title.length < 5) {
-            alert("타이틀을 5글자 이상 입력해주세요.");
-            return;
-        }
-
         if (push.message.length < 5) {
             alert("메시지를 5글자 이상 입력해주세요.");
             return;
         }
 
         setIsLoading(true);
-
         const res = await fetchPushMessage({ ...push, sender_id: Number(session?.user.id), receiver_id: Number(friend?.user_id) });
 
         if (res.data.status === 201) {
@@ -84,14 +77,6 @@ const Push = () => {
                         </div>
 
                         <div className="mt-4 relative">
-                            <input
-                                type="text"
-                                placeholder="title"
-                                className="input input-bordered w-full bg-gray-100"
-                                value={push.title || ""}
-                                onChange={(e) => setPush({ ...push, title: e.target.value })}
-                            />
-
                             <textarea
                                 placeholder="message"
                                 className="mt-2 text-gray-700 textarea textarea-bordered textarea-lg w-full bg-gray-100"

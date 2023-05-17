@@ -1,6 +1,7 @@
 export interface FriendAddProps {
     id: number;
     target_id: number;
+    nickname: string;
 }
 
 export interface FriendItemProps {

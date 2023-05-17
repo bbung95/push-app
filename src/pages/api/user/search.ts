@@ -34,6 +34,15 @@ handler.get(async (req, res) => {
         });
     }
 
+    if (data.length > 0) {
+        const q = query(collection(db, "friend"), where("user_id", "==", Number(data[0].id)), where("target_id", "==", Number(user_id)), limit(1));
+        const findFriends = await getDocs(q);
+
+        findFriends.forEach((item) => {
+            data[0].isFriend = true;
+        });
+    }
+
     return res.json({ status: 200, data: data });
 });
 

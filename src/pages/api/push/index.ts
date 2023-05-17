@@ -6,6 +6,8 @@ import { db } from "@/lib/firebase-init";
 import { getIndex } from "@/utils/DBUtill";
 import { PushProps } from "@/@types/model";
 import { FriendMessageProps } from "@/@types/pushType";
+import { createMessage, sendPushMessage } from "@/utils/PushUtil";
+import { PushMessageTypes } from "@/@types/message";
 
 const handler = nextConnect<NextApiRequest, NextApiResponse>();
 
@@ -27,7 +29,6 @@ handler.get(async (req, res) => {
         data.push({
             id: doc.data().id,
             sender_id: doc.data().sender_id,
-            title: doc.data().title,
             message: doc.data().message,
             created_date: doc.data().created_date.toDate(),
         });
@@ -41,44 +42,28 @@ handler.post(async (req, res) => {
     const body = req.body;
 
     const findUser = await getDoc(doc(db, "user", String(body.receiver_id)));
+
     // push message DB add
     const index = await getIndex("push");
     const push: PushProps = {
         id: index,
         sender_id: body.sender_id,
         receiver_id: body.receiver_id,
-        title: body.title,
         message: body.message,
         created_date: serverTimestamp(),
     };
     await setDoc(doc(db, "push", String(push.id)), push);
+    //
 
     let deviceToken = findUser.data()?.token ?? "";
-
     if (!deviceToken) {
         return res.json({ status: 201 });
     }
 
-    const message = {
-        notification: {
-            title: push.title,
-            body: push.message,
-        },
-        token: deviceToken,
-    };
+    const message = createMessage(PushMessageTypes["push-message"], push.message, deviceToken);
+    const data = await sendPushMessage(message);
 
-    // 발송
-    fcmAdmin
-        .messaging()
-        .send(message)
-        .then(function (response) {
-            console.log("Successfully sent message: : ", response);
-            return res.json({ status: 201 });
-        })
-        .catch(function (err) {
-            console.log("Error Sending message!!! : ", err);
-            return res.json({ status: 400 });
-        });
+    return res.json({ status: 201 });
 });
 
 export default handler;

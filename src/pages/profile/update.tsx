@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { fetchNicknameCheck, fetchUserProfileUpdate } from "@/api/UserFetchAPI";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { UserProfileProps } from "@/@types/userType";
 import { fetchUploadImageFile } from "@/api/UploadFetchAPI";
 import { useSetRecoilState } from "recoil";
 import { loadingState } from "@/recoil/atoms/loadingState";
 import ProfileImage from "@/components/ProfileImage";
-import Alert from "@/components/Alert";
 import { alertState } from "@/recoil/atoms/alertState";
 
 const index = () => {

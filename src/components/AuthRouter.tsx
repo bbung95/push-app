@@ -70,7 +70,7 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
         })();
     }, []);
 
-    if (status === "loading" || !session?.user) {
+    if (status === "loading") {
         return (
             <div className="relative w-screen h-screen bg-main-color">
                 <div className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute">

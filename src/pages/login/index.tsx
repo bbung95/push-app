@@ -6,7 +6,6 @@ import { UserAuthErrorCodes } from "@/@types/errors";
 import { signIn } from "next-auth/react";
 import { useSetRecoilState } from "recoil";
 import { loadingState } from "@/recoil/atoms/loadingState";
-import Alert from "@/components/Alert";
 import { alertState } from "@/recoil/atoms/alertState";
 
 const index = () => {

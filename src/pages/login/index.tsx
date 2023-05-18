@@ -1,25 +1,35 @@
 import UserInputBox from "@/components/UserInputBox";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { UserFormProps } from "@/@types/userType";
 import { UserAuthErrorCodes } from "@/@types/errors";
 import { signIn } from "next-auth/react";
 import { useSetRecoilState } from "recoil";
 import { loadingState } from "@/recoil/atoms/loadingState";
+import Alert from "@/components/Alert";
+import { alertState } from "@/recoil/atoms/alertState";
 
 const index = () => {
     const setIsLoading = useSetRecoilState(loadingState);
 
+    const setAlertState = useSetRecoilState(alertState);
+    const showAlertMessage = (message: string, type: string) => {
+        const state = { isShow: true, message: message, type: type };
+        setAlertState(state);
+        setTimeout(() => {
+            setAlertState({ ...state, isShow: false });
+        }, 2000);
+    };
     const handleOnClickLogin = async ({ email, password }: UserFormProps) => {
         if (email === "") {
             const errorMessage = UserAuthErrorCodes["invalid-email"];
-            alert(errorMessage);
+            showAlertMessage(errorMessage, "warning");
             return;
         }
 
         if (password.length < 6) {
             const errorMessage = UserAuthErrorCodes["weak-password"];
-            alert(errorMessage);
+            showAlertMessage(errorMessage, "warning");
             return;
         }
 
@@ -28,13 +38,13 @@ const index = () => {
 
         if (!res?.ok) {
             const errorMessage = UserAuthErrorCodes["sign-in-fail"];
-            alert(errorMessage);
+            showAlertMessage(errorMessage, "warning");
         }
         setIsLoading(false);
     };
 
     return (
-        <div className="relative h-full bg-main-color flex flex-col items-center">
+        <div className="relative h-full bg-main-color flex flex-col">
             <div className="flex-1 w-11/12 m-auto pt-4">
                 <div className="flex gap-3 flex-1 items-center">
                     <Link href={"/"}>

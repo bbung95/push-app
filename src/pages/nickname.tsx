@@ -32,7 +32,6 @@ const nickname = () => {
 
         if (res.data.status === 201) {
             // session이 변경되면서 router 동작
-            alert("닉네임이 변경되었습니다.");
             update({ first_login: false, nickname: nickname });
         }
     };

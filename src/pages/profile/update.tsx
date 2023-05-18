@@ -4,18 +4,16 @@ import { fetchNicknameCheck, fetchUserProfileUpdate } from "@/api/UserFetchAPI";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { UserProfileProps } from "@/@types/userType";
-import axios from "axios";
-import { headers } from "next/dist/client/components/headers";
 import { fetchUploadImageFile } from "@/api/UploadFetchAPI";
-import Spiner from "@/components/Spiner";
 import { useSetRecoilState } from "recoil";
 import { loadingState } from "@/recoil/atoms/loadingState";
 import ProfileImage from "@/components/ProfileImage";
+import Alert from "@/components/Alert";
+import { alertState } from "@/recoil/atoms/alertState";
 
 const index = () => {
     const { data: session, status, update } = useSession();
     const setIsLoading = useSetRecoilState(loadingState);
-    const router = useRouter();
     const fileRef = useRef<HTMLInputElement>(null);
     const [userData, setUserData] = useState<UserProfileProps>({
         nickname: "",
@@ -23,9 +21,17 @@ const index = () => {
         profile_img: "",
     });
 
+    const setAlertState = useSetRecoilState(alertState);
+    const showAlertMessage = (message: string, type: string) => {
+        const state = { isShow: true, message: message, type: type };
+        setAlertState(state);
+        setTimeout(() => {
+            setAlertState({ ...state, isShow: false });
+        }, 2000);
+    };
+
     const handleOnChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target;
-
         setUserData({ ...userData, [target.name]: target.value });
     };
 
@@ -49,14 +55,14 @@ const index = () => {
 
     const handleUpdateUserProfile = async () => {
         if (userData.nickname === undefined || userData.nickname === "") {
-            alert("닉네임을 입력해주세요.");
+            showAlertMessage("닉네임을 입력해주세요.", "warning");
             return;
         }
 
         const { data } = await fetchNicknameCheck(userData.nickname);
 
         if (userData.nickname !== session?.user.nickname && !data) {
-            alert("해당 닉네임은 사용중입니다.");
+            showAlertMessage("해당 닉네임은 사용중입니다.", "warning");
             return;
         }
 
@@ -69,7 +75,7 @@ const index = () => {
         if (selectFiles.length > 0) {
             const imageRes = await fetchUploadImageFile(selectFiles[0]);
             if (imageRes.status !== 200) {
-                alert("이미지 업로드시 문제가 발생했습니다.");
+                showAlertMessage("이미지 업로드시 문제가 발생했습니다.", "warning");
                 return;
             }
 
@@ -86,10 +92,9 @@ const index = () => {
         setIsLoading(false);
         if (res.data.status !== 201) return;
 
-        alert("프로필이 수정되었습니다.");
         // session 업데이트
+        showAlertMessage("프로필이 수정되었습니다.", "info");
         await update({ nickname: userData.nickname, state_message: userData.state_message, profile_img: fileUrl });
-        router.push("/profile");
     };
 
     useEffect(() => {
@@ -101,7 +106,7 @@ const index = () => {
     }, [status]);
 
     return (
-        <main className="h-full bg-white w-full overflow-auto pb-28">
+        <main className="relative h-full bg-white w-full overflow-auto pb-28">
             <div className="w-11/12 m-auto pt-4">
                 <div className="flex gap-3 items-center">
                     <Link href={"/profile"}>

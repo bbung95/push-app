@@ -5,6 +5,7 @@ import AuthRouter from "./AuthRouter";
 import { useRecoilValue } from "recoil";
 import { loadingState } from "@/recoil/atoms/loadingState";
 import Spiner from "./Spiner";
+import Alert from "./Alert";
 
 const Layout = ({ children }: { children: JSX.Element }) => {
     const router = useRouter();
@@ -25,6 +26,7 @@ const Layout = ({ children }: { children: JSX.Element }) => {
                         </div>
                     </div>
                 )}
+                <Alert />
             </div>
         </AuthRouter>
     );

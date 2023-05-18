@@ -58,6 +58,8 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
     }, [session]);
 
     useEffect(() => {
+        console.log("status", status);
+
         (async () => {
             if (status === "authenticated") {
                 const token = await requestPermission();
@@ -68,7 +70,7 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
         })();
     }, []);
 
-    if (status === "loading") {
+    if (status === "loading" || !session?.user) {
         return (
             <div className="relative w-screen h-screen bg-main-color">
                 <div className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute">
@@ -76,9 +78,9 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
                 </div>
             </div>
         );
-    } else {
-        return <>{children}</>;
     }
+
+    return <>{children}</>;
 };
 
 export default AuthRouter;

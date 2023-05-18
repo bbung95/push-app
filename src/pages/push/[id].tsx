@@ -8,6 +8,8 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
+import Alert from "@/components/Alert";
+import { alertState } from "@/recoil/atoms/alertState";
 
 interface PushMessageProp {
     message: string;
@@ -23,11 +25,20 @@ const Push = () => {
     const [push, setPush] = useState<PushMessageProp>(initialize);
     const setIsLoading = useSetRecoilState(loadingState);
 
+    const setAlertState = useSetRecoilState(alertState);
+    const showAlertMessage = (message: string, type: string) => {
+        const state = { isShow: true, message: message, type: type };
+        setAlertState(state);
+        setTimeout(() => {
+            setAlertState({ ...state, isShow: false });
+        }, 2000);
+    };
+
     const handleOnChangeText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const value = e.target.value;
 
         if (value.length > 40) {
-            alert("40글자 이상 작성할 수 없습니다.");
+            showAlertMessage("40글자 이상 작성할 수 없습니다.", "warning");
         } else {
             setPush({ ...push, message: value });
         }
@@ -35,7 +46,7 @@ const Push = () => {
 
     const handleSendPushMessage = async () => {
         if (push.message.length < 5) {
-            alert("메시지를 5글자 이상 입력해주세요.");
+            showAlertMessage("메시지를 5글자 이상 입력해주세요.", "warning");
             return;
         }
 
@@ -43,7 +54,7 @@ const Push = () => {
         const res = await fetchPushMessage({ ...push, sender_id: Number(session?.user.id), receiver_id: Number(friend?.user_id) });
 
         if (res.data.status === 201) {
-            alert("푸쉬메시지를 보냈습니다.");
+            showAlertMessage("푸쉬메시지를 보냈습니다.", "info");
             setPush(initialize);
         }
         setIsLoading(false);

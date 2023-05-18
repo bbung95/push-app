@@ -4,11 +4,13 @@ import { fetchChangeLike, fetchFriendRemove, fetchGetFriend } from "@/api/Friend
 import { fetchFriendPushMessage } from "@/api/PushFetchAPI";
 import ProfileImage from "@/components/ProfileImage";
 import PushMessage from "@/components/PushMessage";
+import { alertState } from "@/recoil/atoms/alertState";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
+import { useSetRecoilState } from "recoil";
 
 const index = () => {
     const router = useRouter();
@@ -23,6 +25,15 @@ const index = () => {
         user_id: 0,
     });
     const [pushMessages, setPushMessages] = useState<FriendMessageProps[]>([]);
+
+    const setAlertState = useSetRecoilState(alertState);
+    const showAlertMessage = (message: string, type: string) => {
+        const state = { isShow: true, message: message, type: type };
+        setAlertState(state);
+        setTimeout(() => {
+            setAlertState({ ...state, isShow: false });
+        }, 2000);
+    };
 
     const handleChangeLike = async (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -42,7 +53,8 @@ const index = () => {
         const res = await fetchFriendRemove(friend.id);
 
         if (res.data.status === 201) {
-            alert("친구가 삭제되었습니다.");
+            showAlertMessage("친구가 삭제되었습니다", "info");
+
             router.push("/friend");
         }
     };

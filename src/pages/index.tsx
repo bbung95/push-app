@@ -9,20 +9,12 @@ export default function index() {
     };
 
     const handleNotificationPermision = () => {
-        // setTimeout(async () => {
-        //     const token = await requestPermission();
-        //     localStorage.setItem("fcm-token", token);
-        //     alert("시작" + token);
-        // }, 1000);
-    };
-
-    useEffect(() => {
         setTimeout(async () => {
             const token = await requestPermission();
             localStorage.setItem("fcm-token", token);
             alert("시작" + token);
         }, 1000);
-    }, []);
+    };
 
     return (
         <div className="relative h-full bg-main-color" onLoad={handleNotificationPermision}>

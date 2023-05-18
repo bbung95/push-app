@@ -21,3 +21,7 @@ body {
     /* color: rgb(var(--foreground-rgb)); */
     color: #2d2d2d;
 }
+
+*::-webkit-scrollbar {
+    display: none;
+}

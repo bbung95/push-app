@@ -1,6 +1,7 @@
 import { fetchUserTokenUpdate } from "@/api/UserFetchAPI";
 import { requestPermission } from "@/utils/Notification";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
@@ -59,7 +60,7 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
     if (status === "loading") {
         return (
             <div className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute">
-                <img src="/image/icon-192x192.png" alt="" />
+                <Image src="/image/white-image.png" alt="" width={150} height={150} />
             </div>
         );
     } else {

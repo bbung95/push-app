@@ -57,10 +57,23 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
         })();
     }, [session]);
 
+    useEffect(() => {
+        (async () => {
+            if (status === "authenticated") {
+                const token = await requestPermission();
+                if (token) {
+                    fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
+                }
+            }
+        })();
+    }, []);
+
     if (status === "loading") {
         return (
-            <div className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute">
-                <Image src="/image/white-image.png" alt="" width={150} height={150} />
+            <div className="relative w-screen h-screen bg-main-color">
+                <div className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 absolute">
+                    <Image src="/image/icon-512x512.png" alt="" width={150} height={150} />
+                </div>
             </div>
         );
     } else {

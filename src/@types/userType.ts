@@ -47,3 +47,9 @@ export interface UserProfileProps {
 export interface UserUpdateProps extends UserProfileProps {
     id: string;
 }
+
+export interface UserSessionProps {
+    nickname: string;
+    state_message: string;
+    profile_img: string;
+}

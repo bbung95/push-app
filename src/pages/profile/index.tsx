@@ -1,18 +1,23 @@
 import { fetchDeleteUserToken } from "@/api/UserFetchAPI";
 import ProfileImage from "@/components/ProfileImage";
-import { fcmToken, requestPermission } from "@/utils/Notification";
+import { loadingState } from "@/recoil/atoms/loadingState";
+import { requestPermission } from "@/utils/Notification";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
+import { useSetRecoilState } from "recoil";
 
 const index = () => {
     const { data: session } = useSession();
+    const setIsLoading = useSetRecoilState(loadingState);
 
     const handleOnClickLogout = async () => {
         if (!confirm("로그아웃 됩니다")) return;
 
+        setIsLoading(true);
         await fetchDeleteUserToken(String(session?.user.id));
         const data = await signOut({ redirect: false, callbackUrl: "/foo" });
+        setIsLoading(false);
     };
 
     return (

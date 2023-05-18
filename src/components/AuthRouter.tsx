@@ -1,4 +1,4 @@
-import { fetchUserTokenUpdate } from "@/api/UserFetchAPI";
+import { fetchGetUser, fetchUserTokenUpdate } from "@/api/UserFetchAPI";
 import { requestPermission } from "@/utils/Notification";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 const AuthRouter = ({ children }: { children: JSX.Element }) => {
     const router = useRouter();
     const { pathname } = router;
-    const { data: session, status } = useSession();
+    const { data: session, status, update } = useSession();
 
     // 상수 export
     const authURLs = ["/", "/login", "/signup"];
@@ -46,29 +46,27 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
 
     useEffect(() => {
         authRouter();
+        alert(status);
 
         (async () => {
-            if (status === "authenticated") {
+            if (status === "authenticated" || session) {
+                // const res = await fetchGetUser(session.user.id);
+
+                // console.log(res);
+
+                alert("come");
+                // update(res.data.data);
+
                 const token = await requestPermission();
+
+                alert(token);
+
                 if (token) {
                     fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
                 }
             }
         })();
     }, [session]);
-
-    useEffect(() => {
-        console.log("status", status);
-
-        (async () => {
-            if (status === "authenticated") {
-                const token = await requestPermission();
-                if (token) {
-                    fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
-                }
-            }
-        })();
-    }, []);
 
     if (status === "loading") {
         return (

@@ -95,3 +95,13 @@ export const fetchUserSearch = async (id: number, keyword: string) => {
 
     return res;
 };
+
+// 유저 정보 가져오기
+export const fetchGetUser = async (id: number) => {
+    const res = await axios({
+        method: "get",
+        url: `/api/user/${id}`,
+    });
+
+    return res;
+};

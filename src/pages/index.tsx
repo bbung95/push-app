@@ -8,16 +8,8 @@ export default function index() {
         const result = await signIn(type, { callbackUrl: "/home" });
     };
 
-    const handleNotificationPermision = () => {
-        setTimeout(async () => {
-            const token = await requestPermission();
-            localStorage.setItem("fcm-token", token);
-            alert("시작" + token);
-        }, 1000);
-    };
-
     return (
-        <div className="relative h-full bg-main-color" onLoad={handleNotificationPermision}>
+        <div className="relative h-full bg-main-color">
             <div className="absolute flex flex-col gap-4 w-9/12 m-auto items-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <img src="/image/white-logo.png" alt="" className="w-40 pt-32 pb-10" />
 

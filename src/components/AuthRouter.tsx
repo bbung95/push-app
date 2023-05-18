@@ -52,12 +52,8 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
                 // const res = await fetchGetUser(session.user.id);
                 // console.log(res);
                 // update(res.data.data);
-
-                const token = localStorage.getItem("fcm-token");
-                alert(token);
-                if (token) {
-                    fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
-                }
+                const token = await requestPermission();
+                fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
             }
         })();
     }, [session]);

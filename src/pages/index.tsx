@@ -1,13 +1,21 @@
+import { requestPermission } from "@/utils/Notification";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useEffect } from "react";
 
 export default function index() {
     const handleOAuthLogin = async (type: string) => {
         const result = await signIn(type, { callbackUrl: "/home" });
     };
 
+    const handleNotificationPermision = async () => {
+        const token = await requestPermission();
+        localStorage.setItem("fcm-token", token);
+        alert("시작" + token);
+    };
+
     return (
-        <div className="relative h-full bg-main-color">
+        <div className="relative h-full bg-main-color" onLoad={handleNotificationPermision}>
             <div className="absolute flex flex-col gap-4 w-9/12 m-auto items-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <img src="/image/white-logo.png" alt="" className="w-40 pt-32 pb-10" />
 

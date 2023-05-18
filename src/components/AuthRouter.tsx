@@ -62,13 +62,6 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
         })();
     }, [session]);
 
-    useEffect(() => {
-        (async () => {
-            const token = await requestPermission();
-            localStorage.setItem("fcm-token", token);
-        })();
-    }, []);
-
     if (status === "loading") {
         return (
             <div className="relative w-screen h-screen bg-main-color">

@@ -21,11 +21,9 @@ export const requestPermission = async () => {
 
             fcmToken.token = token;
         } else if (permission === "denied") {
-            alert("denied");
             fcmToken.token = "";
         }
     } else {
-        alert("지원을 안함");
         fcmToken.token = "";
     }
     return fcmToken.token;

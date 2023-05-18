@@ -46,27 +46,28 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
 
     useEffect(() => {
         authRouter();
-        alert(status);
 
         (async () => {
             if (status === "authenticated" || session) {
                 // const res = await fetchGetUser(session.user.id);
-
                 // console.log(res);
-
-                alert("come");
                 // update(res.data.data);
 
-                const token = await requestPermission();
-
+                const token = localStorage.getItem("fcm-token");
                 alert(token);
-
                 if (token) {
                     fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
                 }
             }
         })();
     }, [session]);
+
+    useEffect(() => {
+        (async () => {
+            const token = await requestPermission();
+            localStorage.setItem("fcm-token", token);
+        })();
+    }, []);
 
     if (status === "loading") {
         return (

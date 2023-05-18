@@ -1,4 +1,4 @@
-import { fetchDeleteUserToken } from "@/api/UserFetchAPI";
+import { fetchDeleteUserToken, fetchUserTokenUpdate } from "@/api/UserFetchAPI";
 import ProfileImage from "@/components/ProfileImage";
 import { loadingState } from "@/recoil/atoms/loadingState";
 import { requestPermission } from "@/utils/Notification";
@@ -16,8 +16,13 @@ const index = () => {
 
         setIsLoading(true);
         await fetchDeleteUserToken(String(session?.user.id));
-        const data = await signOut({ redirect: false, callbackUrl: "/foo" });
+        await signOut({ redirect: false, callbackUrl: "/foo" });
         setIsLoading(false);
+    };
+
+    const handleOnClickNotification = async () => {
+        const token = await requestPermission();
+        fetchUserTokenUpdate({ id: String(session?.user.id), token: token ?? "" });
     };
 
     return (
@@ -46,7 +51,7 @@ const index = () => {
                             <Link href="/profile/invited" className="btn btn-info text-white text-lg">
                                 초대목록
                             </Link>
-                            <button className="btn btn-accent text-white text-lg" onClick={requestPermission}>
+                            <button className="btn btn-accent text-white text-lg" onClick={handleOnClickNotification}>
                                 알림 설정
                             </button>
                             <button className="btn btn-error text-white text-lg" onClick={handleOnClickLogout}>

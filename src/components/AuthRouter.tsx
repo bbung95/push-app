@@ -8,7 +8,7 @@ import React, { useEffect } from "react";
 const AuthRouter = ({ children }: { children: JSX.Element }) => {
     const router = useRouter();
     const { pathname } = router;
-    const { data: session, status, update } = useSession();
+    const { data: session, status } = useSession();
 
     // 상수 export
     const authURLs = ["/", "/login", "/signup"];

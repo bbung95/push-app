@@ -1,33 +1,21 @@
 import { FriendItemProps } from "@/@types/friendType";
 import { fetchFriendList } from "@/api/FriendFetchAPI";
 import FriendItem from "@/components/FriendItem";
+import { useFriendList } from "@/hooks/FriendHook";
 import { loadingState } from "@/recoil/atoms/loadingState";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import React, { useEffect, useRef } from "react";
 import { useSetRecoilState } from "recoil";
 
 const index = () => {
     const { data: session } = useSession();
-    const [keyword, setKeyword] = useState("");
-    const [friends, setFriends] = useState<FriendItemProps[]>([]);
-    const [searchFriends, setSearchFriends] = useState<FriendItemProps[]>([]);
+    const inputRef = useRef<string>("");
     const setIsLoading = useSetRecoilState(loadingState);
 
-    const { data, isLoading } = useQuery(["friendListKey", session?.user.id], () => fetchFriendList(Number(session?.user.id)), {
-        cacheTime: 1000 * 60 * 5,
-    });
-
-    const handleUserSearch = async () => {
-        setSearchFriends(friends.filter((item) => item.nickname.includes(keyword)));
-    };
+    const { friends, handleUserSearch, isLoading } = useFriendList(Number(session?.user.id));
 
     useEffect(() => {
-        if (!isLoading) {
-            setFriends(data?.data.data);
-            setSearchFriends(data?.data.data);
-        }
         setIsLoading(isLoading);
     }, [isLoading]);
 
@@ -42,15 +30,15 @@ const index = () => {
                         </Link>
                     </div>
                     <div className="mt-4 relative">
-                        <input value={keyword} onChange={(e) => setKeyword(e.target.value)} type="text" placeholder="Search..." className="input input-bordered rounded-xl bg-gray-100 w-full pr-12" />
-                        <button className="absolute right-4 top-1/2 -translate-y-1/2" onClick={handleUserSearch}>
+                        <input onChange={(e) => (inputRef.current = e.target.value)} type="text" placeholder="Search..." className="input input-bordered rounded-xl bg-gray-100 w-full pr-12" />
+                        <button className="absolute right-4 top-1/2 -translate-y-1/2" onClick={() => handleUserSearch(inputRef.current)}>
                             <img className="w-8 h-8" src="/icon/search.svg" alt="" width={24} height={24} />
                         </button>
                     </div>
                 </div>
 
                 <ul className="mt-4 flex flex-wrap gap-3 pb-12 overflow-auto" style={{ maxHeight: "calc(100% - 100px)" }}>
-                    {searchFriends.map((item) => (
+                    {friends.map((item) => (
                         <FriendItem key={item.id} info={item} />
                     ))}
                 </ul>

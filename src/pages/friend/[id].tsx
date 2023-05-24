@@ -9,7 +9,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import { useSetRecoilState } from "recoil";
 
 const index = () => {

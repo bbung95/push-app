@@ -41,14 +41,16 @@ handler.delete(async (req, res) => {
 
     const findFriend = await getDoc(doc(db, "friend", String(id)));
     const data = findFriend.data();
-    console.log("data", data);
     const q = query(collection(db, "friend"), where("user_id", "==", Number(data?.target_id)), where("target_id", "==", Number(data?.user_id)), limit(1));
-    const findTarget = await getDocs(q);
+    const findTargets = await getDocs(q);
 
-    findTarget.forEach(async (item) => {
-        await deleteDoc(doc(db, "friend", String(item.data().id)));
-        await deleteDoc(doc(db, "friend", String(id)));
+    const findTarget: number[] = [];
+    findTargets.forEach(async (item) => {
+        findTarget.push(item.data().id);
     });
+
+    await deleteDoc(doc(db, "friend", String(findTarget[0])));
+    await deleteDoc(doc(db, "friend", String(id)));
 
     return res.json({ status: 201 });
 });

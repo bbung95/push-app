@@ -1,4 +1,4 @@
-import { fetchGetUser, fetchUserTokenUpdate } from "@/api/UserFetchAPI";
+import { fetchUserTokenUpdate } from "@/api/UserFetchAPI";
 import { requestPermission } from "@/utils/Notification";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
@@ -17,7 +17,6 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
         if (authURLs.includes(pathname)) {
             // 로그인 O
             if (status === "authenticated") {
-                console.log("go home");
                 if (session.user.first_login) {
                     router.push("/nickname");
                     return;
@@ -29,7 +28,6 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
         } else {
             // 로그인 X
             if (status === "unauthenticated") {
-                console.log("go root");
                 router.push("/");
                 return;
             }
@@ -52,6 +50,7 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
                 // const res = await fetchGetUser(session.user.id);
                 // console.log(res);
                 // update(res.data.data);
+                console.log(session);
                 const token = await requestPermission();
                 fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
             }

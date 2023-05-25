@@ -52,7 +52,7 @@ const AuthRouter = ({ children }: { children: JSX.Element }) => {
                 // update(res.data.data);
 
                 const token = await requestPermission();
-                if (token !== "") return;
+                if (token === "") return;
                 fetchUserTokenUpdate({ id: String(session.user.id), token: token ?? "" });
             }
         })();

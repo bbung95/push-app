@@ -1,11 +1,13 @@
 # ✉️ TABTAB
 
-![](/public/images/icon-192x192.png)
+![](/public/image/icon-192x192.png)
 
 > TABTAB은 평소에 하지 못하는 표현이나, 대화를 하고 답장을 하기에 부담스러운분들을 위해 만들어졌습니다.
 > 간단한 이모티콘과 텍스트로 쪽지 푸쉬알림을 보낼 수 있습니다.
 
 **배포** : https://push-app-pi.vercel.app/
+
+**Figma** : https://url.kr/8zk6e1
 
 ## 🚀 주요기능
 
